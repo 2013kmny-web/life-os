@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Life OS">
+<title>Kamil's Life OS v19</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F7F5F0;--surface:#FFFFFF;--surface2:#F0EDE8;
+  --border:rgba(0,0,0,0.08);--border-med:rgba(0,0,0,0.14);
+  --text:#1A1A18;--text2:#6B6860;--text3:#A8A59E;
+  --mov:#0F6E56;--mov-bg:#E1F5EE;
+  --radius:14px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:90px}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(247,245,240,0.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:12px 20px 10px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.topbar-brand{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
+.topbar-title{font-family:'DM Serif Display',serif;font-size:17px;color:var(--text)}
+.topbar-date{font-size:11px;color:var(--text3)}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(247,245,240,0.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:0.5px solid var(--border);display:flex;padding:8px 0 env(safe-area-inset-bottom)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;cursor:pointer;border:none;background:none;font-family:'DM Sans',sans-serif}
+.nav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.nav-icon svg{width:20px;height:20px;stroke:var(--text3);fill:none;stroke-width:1.5;stroke-linecap:round;transition:stroke .15s}
+.nav-label{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.03em;transition:color .15s}
+.nav-item.on .nav-icon svg{stroke:var(--text)}
+.nav-item.on .nav-label{color:var(--text)}
+
+.page{display:none;padding:20px}
+.page.on{display:block}
+.page-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--text);margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
+.sl{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+
+.card{background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--border);overflow:hidden;margin-bottom:12px}
+
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.cat-card{background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--border);padding:14px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.cat-card:active{transform:scale(0.98)}
+.cat-accent{position:absolute;top:0;left:0;width:100%;height:3px}
+.cat-num{font-size:10px;color:var(--text3);margin-bottom:4px;font-weight:500}
+.cat-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.cat-theme{font-size:11px;color:var(--text2)}
+.cat-prog{display:flex;gap:2px;margin-top:10px;flex-wrap:wrap}
+.cpd{width:6px;height:6px;border-radius:50%;background:var(--border-med)}
+.cpd.done{background:var(--mov)}
+.cat-frac{font-size:10px;color:var(--text3);margin-top:5px}
+
+.detail-header{display:flex;gap:12px;align-items:flex-start;padding:16px;border-bottom:0.5px solid var(--border)}
+.detail-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.detail-name{font-size:17px;font-weight:500;color:var(--text)}
+.detail-theme{font-size:12px;color:var(--text2);margin-top:2px}
+
+.info-block{padding:14px 16px;border-bottom:0.5px solid var(--border)}
+.info-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:7px}
+.info-txt{font-size:13px;color:var(--text2);line-height:1.65}
+.info-txt.it{font-style:italic}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:11px;padding:3px 9px;border-radius:12px;font-weight:500}
+
+.period-tabs{display:flex;background:var(--surface2);border-radius:var(--radius-sm);padding:3px;gap:3px;margin:14px 16px}
+.ptab{flex:1;font-size:11px;font-weight:500;padding:6px 4px;text-align:center;border-radius:6px;cursor:pointer;color:var(--text3);border:none;background:transparent;font-family:'DM Sans',sans-serif;transition:all .15s}
+.ptab.on{background:var(--surface);color:var(--text);border:0.5px solid var(--border)}
+
+.goals-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px}
+.goal-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface);cursor:pointer;transition:all .15s}
+.goal-row:active{background:var(--surface2)}
+.gcheck{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border-med);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.gcheck.on{background:var(--mov);border-color:var(--mov)}
+.gcheck.on::after{content:'';display:block;width:5px;height:9px;border-right:2px solid white;border-bottom:2px solid white;transform:rotate(45deg) translate(-1px,-1px)}
+.gtext{font-size:13px;color:var(--text);line-height:1.5;flex:1}
+.gtext.done{color:var(--text3);text-decoration:line-through}
+.fiveyear-box{margin:0 16px 16px;background:var(--surface2);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--text2);line-height:1.7;border-left:2px solid var(--border-med)}
+
+.metric-goal{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface)}
+.metric-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.metric-lbl{font-size:13px;color:var(--text);flex:1}
+.metric-inp{font-size:14px;font-weight:500;width:110px;padding:5px 8px;border:0.5px solid var(--border-med);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif;text-align:right}
+.metric-inp:focus{outline:none;border-color:var(--mov)}
+.metric-prog{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.metric-bar{height:100%;border-radius:2px;background:var(--mov);transition:width .4s ease}
+.metric-pct{font-size:10px;color:var(--text3);text-align:right;margin-top:3px}
+
+.week-card{background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--border);padding:14px;margin-bottom:10px}
+.week-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:8px}
+.wcat-name{font-size:14px;font-weight:500;color:var(--text)}
+.wcat-theme{font-size:11px;color:var(--text2);margin-top:1px}
+.score-row{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;max-width:160px}
+.sbtn{width:28px;height:28px;border-radius:50%;border:0.5px solid var(--border-med);background:transparent;cursor:pointer;font-size:11px;font-weight:500;color:var(--text2);font-family:'DM Sans',sans-serif}
+.sbtn:active{transform:scale(0.92)}
+.sbtn.on{background:var(--text);color:var(--surface);border-color:var(--text)}
+.week-ta{width:100%;font-size:13px;padding:10px 12px;border:0.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif;resize:none;min-height:72px;margin-top:10px;line-height:1.5}
+.week-ta:focus{outline:none;border-color:var(--border-med)}
+.parsed-metrics{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+.parsed-pill{font-size:11px;padding:3px 9px;border-radius:12px;background:var(--mov-bg);color:var(--mov);font-weight:500}
+.save-btn{width:100%;padding:14px;border-radius:var(--radius);background:var(--text);color:var(--surface);font-size:15px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px}
+.save-btn:active{opacity:0.8}
+.save-confirm{text-align:center;font-size:13px;color:var(--mov);margin-top:10px;font-weight:500;display:none}
+
+.mmm-horizon{background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--border);margin-bottom:12px;overflow:hidden}
+.mmm-hhead{padding:14px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mmm-htitle{font-size:15px;font-weight:500;color:var(--text)}
+.mmm-hrange{font-size:11px;color:var(--text3)}
+.mmm-tabs{display:flex;border-bottom:0.5px solid var(--border)}
+.mct{flex:1;font-size:12px;font-weight:500;padding:10px 8px;text-align:center;cursor:pointer;color:var(--text3);border:none;background:transparent;font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent}
+.mct.on{color:var(--text)}
+.mmm-entries{padding:12px 16px;display:flex;flex-direction:column;gap:7px;min-height:80px}
+.entry-pill{display:flex;align-items:flex-start;gap:8px;background:var(--surface2);border-radius:var(--radius-sm);padding:8px 10px}
+.entry-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.entry-t{font-size:13px;color:var(--text);line-height:1.45;flex:1}
+.entry-del{font-size:16px;color:var(--text3);cursor:pointer;background:none;border:none;flex-shrink:0;padding:0 2px;font-family:'DM Sans',sans-serif;line-height:1}
+.add-bar{display:flex;gap:8px;padding:0 16px 14px}
+.add-inp{flex:1;font-size:13px;padding:9px 12px;border:0.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif}
+.add-inp:focus{outline:none;border-color:var(--border-med)}
+.add-btn-sm{font-size:13px;font-weight:500;padding:9px 14px;border-radius:var(--radius-sm);border:0.5px solid var(--border-med);background:transparent;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.add-btn-sm:active{background:var(--surface2)}
+.empty-hint{font-size:12px;color:var(--text3);font-style:italic}
+
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.stat-card{background:var(--surface);border-radius:var(--radius-sm);padding:14px 12px;text-align:center;border:0.5px solid var(--border)}
+.stat-num{font-size:26px;font-weight:300;color:var(--text);font-family:'DM Serif Display',serif}
+.stat-label{font-size:10px;color:var(--text3);margin-top:3px;font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+.bar-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.bar-row:last-child{border-bottom:none}
+.bar-name{font-size:13px;color:var(--text);width:110px;flex-shrink:0;display:flex;align-items:center;gap:6px}
+.bar-dot-sm{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.bar-wrap{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.bar-score{font-size:12px;font-weight:500;color:var(--text2);width:34px;text-align:right}
+.myself-card{background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--border);padding:14px 16px;margin-bottom:10px}
+.myself-horizon{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.myself-text{font-size:14px;color:var(--text);line-height:1.7;font-style:italic;font-family:'DM Serif Display',serif}
+.gen-btn{width:100%;padding:14px;border-radius:var(--radius);border:0.5px solid var(--border-med);background:transparent;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px}
+.gen-btn:active{background:var(--surface2)}
+
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(26,26,24,0.5);align-items:flex-end}
+.modal-overlay.on{display:flex}
+.modal-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:24px 20px;padding-bottom:calc(24px + env(safe-area-inset-bottom));width:100%}
+.modal-title{font-size:17px;font-weight:500;color:var(--text);margin-bottom:6px}
+.modal-body{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+.modal-actions{display:flex;flex-direction:column;gap:8px}
+.modal-yes{padding:14px;border-radius:var(--radius-sm);background:var(--text);color:var(--surface);font-size:15px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+.modal-skip{padding:14px;border-radius:var(--radius-sm);background:transparent;color:var(--text2);font-size:15px;border:0.5px solid var(--border-med);cursor:pointer;font-family:'DM Sans',sans-serif}
+
+.rollover-banner{background:var(--mov-bg);border:0.5px solid var(--mov);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--mov);line-height:1.6;display:none}
+.rollover-banner b{font-weight:500}
+.card-body{padding:14px 16px}
+
+.goal-edit-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface);margin-bottom:6px}
+.goal-edit-inp{flex:1;font-size:13px;padding:5px 8px;border:0.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif}
+.goal-edit-inp:focus{outline:none;border-color:var(--border-med)}
+.goal-del-btn{font-size:16px;color:var(--text3);background:none;border:none;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0}
+.goal-del-btn:hover{color:var(--text)}
+.add-goal-row{display:flex;gap:8px;padding:4px 16px 14px}
+.add-goal-inp{flex:1;font-size:13px;padding:9px 12px;border:0.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif}
+.add-goal-inp:focus{outline:none;border-color:var(--border-med)}
+.add-goal-btn{font-size:13px;font-weight:500;padding:9px 14px;border-radius:var(--radius-sm);border:0.5px solid var(--border-med);background:transparent;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.add-goal-btn:active{background:var(--surface2)}
+.q-contrib{font-size:10px;color:var(--text3);margin-top:3px;font-style:italic}
+.period-summary{margin:0 16px 12px;background:var(--surface2);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.period-summary-label{font-size:12px;color:var(--text2)}
+.period-summary-pct{font-size:16px;font-weight:500;color:var(--text)}
+.review-goal-row{padding:12px 0;border-bottom:0.5px solid var(--border);display:flex;flex-direction:column;gap:8px}
+.review-goal-row:last-child{border-bottom:none}
+.review-goal-label{font-size:14px;color:var(--text);line-height:1.4}
+.review-goal-actions{display:flex;gap:8px}
+.review-btn{flex:1;padding:8px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;border:0.5px solid var(--border-med)}
+.review-btn.carry{background:var(--text);color:var(--surface);border-color:var(--text)}
+.review-btn.drop{background:transparent;color:var(--text2)}
+.prev-period-section{margin:0 16px 16px;border-top:0.5px dashed var(--border);padding-top:14px}
+.prev-period-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.prev-period-lbl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.prev-period-frac{font-size:11px;color:var(--text3)}
+.prev-period-frac.all-done{color:var(--mov)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">Integre Life OS</div>
+  <div class="topbar-title">Kamil</div>
+  <div class="topbar-date" id="topbar-date"></div>
+</div>
+
+<div class="page on" id="page-home">
+  <div class="page-title">Life Plan</div>
+  <div class="page-sub" id="home-sub"></div>
+  <div class="rollover-banner" id="rollover-banner"></div>
+  <div class="sl">Your categories</div>
+  <div class="cat-grid" id="cat-grid"></div>
+  <div id="cat-detail"></div>
+</div>
+
+<div class="page" id="page-weekly">
+  <div class="page-title">Weekly check-in</div>
+  <div class="page-sub" id="weekly-sub">Score each area &amp; drop your note</div>
+  <div id="weekly-cards"></div>
+  <button class="save-btn" onclick="saveWeekly()">Save this week</button>
+  <div class="save-confirm" id="save-confirm"></div>
+</div>
+
+<div class="page" id="page-journal">
+  <div class="page-title">Memories, Moves &amp; Magic</div>
+  <div class="page-sub" id="journal-sub">Five time horizons</div>
+  <div id="journal-view"></div>
+</div>
+
+<div class="page" id="page-report">
+  <div class="page-title">Quarterly report</div>
+  <div class="page-sub" id="report-sub">Live snapshot</div>
+  <div id="report-view"></div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-item on" onclick="showPage('home',this)">
+    <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <span class="nav-label">Life Plan</span>
+  </button>
+  <button class="nav-item" onclick="showPage('weekly',this)">
+    <div class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+    <span class="nav-label">Check-in</span>
+  </button>
+  <button class="nav-item" onclick="showPage('journal',this)">
+    <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+    <span class="nav-label">Journal</span>
+  </button>
+  <button class="nav-item" onclick="showPage('report',this)">
+    <div class="nav-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+    <span class="nav-label">Report</span>
+  </button>
+</nav>
+
+<div class="modal-overlay" id="modal" onclick="closeModal()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-title">Log to journal?</div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="modal-yes" id="modal-yes-btn" onclick="confirmLog()">Yes, add to Moves</button>
+      <button class="modal-skip" onclick="closeModal()">Skip</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// ============================================================
+// DYNAMIC DATE UTILITIES
+// ============================================================
+function getQuarterNum(d){ return Math.floor(d.getMonth()/3)+1; }
+function getQuarterKey(d){ return `${d.getFullYear()}-Q${getQuarterNum(d)}`; }
+function getYearKey(d){ return `${d.getFullYear()}`; }
+
+function currentQuarterLabel(d){
+  d = d || new Date();
+  return `Q${getQuarterNum(d)} ${d.getFullYear()}`;
+}
+
+function currentMonthLabel(d){
+  d = d || new Date();
+  return d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+}
+
+// Returns the first day and last day of the current quarter
+function currentQuarterRange(d){
+  d = d || new Date();
+  const q = getQuarterNum(d);
+  const y = d.getFullYear();
+  const starts = [0,3,6,9]; // Jan, Apr, Jul, Oct
+  const ends   = [2,5,8,11];
+  const start = new Date(y, starts[q-1], 1);
+  const end   = new Date(y, ends[q-1]+1, 0);
+  const fmt = (dt) => dt.toLocaleDateString('en-US',{month:'short',year:'numeric'});
+  return `${fmt(start)} – ${fmt(end)}`;
+}
+
+// Last 12 months range label
+function last12MonthsRange(d){
+  d = d || new Date();
+  const end = new Date(d);
+  const start = new Date(d.getFullYear()-1, d.getMonth()+1, 1);
+  const fmt = (dt) => dt.toLocaleDateString('en-US',{month:'short',year:'numeric'});
+  return `${fmt(start)} – ${fmt(end)}`;
+}
+
+// Last 3 years range
+function last3YearsRange(d){
+  d = d || new Date();
+  return `${d.getFullYear()-3} – ${d.getFullYear()}`;
+}
+
+// 5 year vision range
+function fiveYearRange(d){
+  d = d || new Date();
+  return `${d.getFullYear()} – ${d.getFullYear()+5}`;
+}
+
+function lastQuarterRange(d){
+  d = d || new Date();
+  const q = getQuarterNum(d);
+  const y = d.getFullYear();
+  const prevQ = q === 1 ? 4 : q - 1;
+  const prevY = q === 1 ? y - 1 : y;
+  const starts = [0,3,6,9];
+  const ends   = [2,5,8,11];
+  const mFmt = (m,yr) => new Date(yr, m, 1).toLocaleDateString('en-US',{month:'short',year:'numeric'});
+  return mFmt(starts[prevQ-1],prevY) + ' – ' + mFmt(ends[prevQ-1],prevY);
+}
+
+function lastYearRange(d){
+  d = d || new Date();
+  return 'Jan ' + (d.getFullYear()-1) + ' – Dec ' + (d.getFullYear()-1);
+}
+
+function twoQuartersAgoRange(d){
+  d = d || new Date();
+  const q = getQuarterNum(d);
+  const y = d.getFullYear();
+  const tqNum = q <= 2 ? q + 2 : q - 2;
+  const tqY = q <= 2 ? y - 1 : y;
+  const starts = [0,3,6,9];
+  const ends   = [2,5,8,11];
+  const mFmt = (m,yr) => new Date(yr, m, 1).toLocaleDateString('en-US',{month:'short',year:'numeric'});
+  return mFmt(starts[tqNum-1],tqY) + ' – ' + mFmt(ends[tqNum-1],tqY);
+}
+
+function getHorizons(){
+  const now = new Date();
+  const q = getQuarterNum(now);
+  const y = now.getFullYear();
+  const prevQ = q === 1 ? 4 : q - 1;
+  const prevY = q === 1 ? y - 1 : y;
+  const tqNum = q <= 2 ? q + 2 : q - 2;
+  const tqY = q <= 2 ? y - 1 : y;
+  return [
+    {id:'cq', label:'Q' + q + ' ' + y + ' — Current Quarter', range: currentQuarterRange(now)},
+    {id:'lq', label:'Q' + prevQ + ' ' + prevY + ' — Last Quarter', range: lastQuarterRange(now)},
+    {id:'tq', label:'Q' + tqNum + ' ' + tqY + ' — Two Quarters Ago', range: twoQuartersAgoRange(now)},
+    {id:'ly', label:'' + (y-1) + ' — Last Year', range: lastYearRange(now)},
+    {id:'3y', label:'Last 3 Years', range: last3YearsRange(now)}
+  ];
+}
+
+// Quarter end dates (rolling — always compute from now)
+function getQuarterEnds(){
+  const now = new Date();
+  const q = getQuarterNum(now);
+  const y = now.getFullYear();
+  const qEnds = [[2,31],[5,30],[8,30],[11,31]]; // [month, day]
+  const ends = [];
+  for(let i=0;i<5;i++){
+    const qi = (q-1+i)%4;
+    const yi = y + Math.floor((q-1+i)/4);
+    ends.push(new Date(yi, qEnds[qi][0], qEnds[qi][1]));
+  }
+  return ends;
+}
+
+// ============================================================
+// CATEGORIES
+// ============================================================
+const CATS = [
+  {
+    id:1, name:'Limitless', theme:'Health & body', color:'#1D9E75', bg:'#E1F5EE', icon:'💪',
+    vision:'I am radiating limitless vitality, with a biological age of 28. Chiseled abs and powerful muscles at 15% body fat are my norm. My body is a testament to disciplined self-love, fueled by clean, nourishing food and powered by deep respect for myself.',
+    purpose:'Capitalize on NOW. There are only so many years we have to see what we are really made of... Show the girls what\'s possible and that self love starts with health.',
+    roles:['Lover','Fighter','Trendsetter','Motivator','Example'],
+    thrive:['Healthy love for food as fuel','Keeping your promises','Shifting into your future self'],
+    resources:'Strong physical sensations (ice cubes, cold water, textured objects). Rhythmic activities (tapping, bouncing a ball, fidget toys). Intense flavors that aren\'t food (strong mint, sour candy). Focused breathing or brief meditation. Music with headphones. Tell yourself "this food will be available again" or "I can have this tomorrow if I want it."',
+    quarterly:['20% body fat','210 lbs walk around weight','8 cheat days ONLY','85% no slips'],
+    monthly:['212 lbs walk around weight','3 cheat days ONLY','85% no slips','5th Dan training 3 times a week'],
+    yearly:['15% body fat','205 lbs walk around weight','Longevity setup complete (sauna, plunge etc.)','New bright white smile','Where you not a little bitch at 85%','Natalia and Nel embracing healthy relationship with food'],
+    fiveYear:'10 years of working out every day. Best shape of my life at 15% BF. Looking and feeling like I\'m 27 years old at 50. Optimal energy. State of the art Gym and Spa. Superhuman protocol part of my everyday routine.'
+  },
+  {
+    id:2, name:'Alive', theme:'Lifestyle & adventure', color:'#378ADD', bg:'#E6F1FB', icon:'🌍',
+    vision:'I am living the future everyday. The world is my playground. Nothing is impossible and living a limitless life is a testament to past and future generations.',
+    purpose:'Creating a deep connection to the universe, myself, Patrycja, Natalia, Nel, my family and my community.',
+    roles:['Adventurer','Dreamer','Connector'],
+    thrive:['Patrycja','Family','Board meetings'],
+    resources:'Creativity, Resourcefulness, Commitment',
+    quarterly:['Do the roof','London (Fam Only)','P&K Only trip','Couples','Book an event','Board meetings','Plan a family reunion'],
+    monthly:['P&K Only trip','Board meeting with Nel','Board meetings with Natalia','Set up board members retreat','Michael Blank'],
+    yearly:['Travel: Poland, Bali, Italy, Bhutan','House manager / personal PA','Personal enrichment: Attend retreats (Dr. Dispenza)','Build a "Dream Day" schedule where each day aligns with your vision and purpose','Plan and host an unforgettable family reunion','Elevate home life: Create spaces for peace, creativity, and connection','Define and implement your "ultimate life concierge" service plan','World Cup','Start house renovation'],
+    fiveYear:'Live a "Dream Day" schedule where each day aligns with your vision and purpose. Fly private for all personal and family travel. Maintain a personal fulfillment concierge to manage life-enhancing tasks. Host an annual "Life Celebration" event for family and close friends. Exclusive lifestyle: Fly first class, hire a private chef, house manager, and acquire a Rolls Royce. Full house renovation. Buy additional luxury location property. Life Style of Abundance.'
+  },
+  {
+    id:3, name:'Mogul', theme:'Business & Integre', color:'#BA7517', bg:'#FAEEDA', icon:'🏆',
+    vision:'Nationwide commercial roofing powerhouse. Collaborating with Brad Jacobs on the evolution of entrepreneurship in the trade service industry. Dominating the market in the exterior home improvement industry by turning B&B Siding and Roofing into a flagship brand that inspires and elevates.',
+    purpose:'To be a difference maker. To explore the limitless possibilities of creating something special. Something that gives "life" to generations to come.',
+    roles:['Confident leader','Creator','Connector'],
+    thrive:['People optimizer','Visionary','Collaborator'],
+    resources:'Partners, Courage, Community',
+    quarterly:[
+      {label:'B&B revenue', type:'metric', target:3138000, unit:'$', id:'bb_rev'},
+      {label:'B&B net profit', type:'metric', target:250000, unit:'$', id:'bb_net'},
+      {label:'B&B appointments (Q)', type:'metric', target:312, unit:'#', id:'bb_appt'},
+      {label:'B&B RPA', type:'metric', target:7000, unit:'$', id:'bb_rpa'},
+      {label:'Nu-Tek revenue', type:'metric', target:8145000, unit:'$', id:'nt_rev'},
+      {label:'Nu-Tek net profit', type:'metric', target:1080000, unit:'$', id:'nt_net'},
+      {label:'Closed on Farrell Roofing', type:'goal'},
+      {label:'Mike and Lorin part of the acquisition team', type:'goal'},
+      {label:'3rd acquisition opportunity started', type:'goal'},
+      {label:'Financial waterfall created', type:'goal'},
+      {label:'IT AI driven companies', type:'goal'}
+    ],
+    monthly:[
+      {label:'B&B monthly revenue', type:'metric', target:731000, unit:'$', id:'bb_rev_mo'},
+      {label:'B&B RPA', type:'metric', target:7000, unit:'$', id:'bb_rpa_mo'},
+      {label:'B&B appointments', type:'metric', target:104, unit:'#', id:'bb_appt_mo'},
+      {label:'Nu-Tek booked revenue', type:'metric', target:1800000, unit:'$', id:'nt_rev_mo'},
+      {label:'New sales training class completed', type:'goal'},
+      {label:'Sales manager either optimized or search started', type:'goal'},
+      {label:'Nu-Tek quarterly meeting executed', type:'goal'},
+      {label:'LOI signed and DD in motion', type:'goal'},
+      {label:'Partnership charter started with Mike', type:'goal'},
+      {label:'Sell Open (Exclusive)', type:'goal'}
+    ],
+    yearly:['B&B Siding & Roofing: $8.5M revenue, $500K net','Nu-Tek Roof Systems: $18.5M revenue, $2.5M net, Fully running dashboards and systems','Two +$1M EBITDA acquisitions','$40,000,000 in revenues (4 businesses)','Full acquisitions team','Dream Manager Program: Fully operational with a dedicated full-time Dream Manager','Company Culture: Fully implement a culture program with goal-setting retreats and systems for celebrating successes','Purchase industrial property','Personal Finances: 3-5 years of capital for nasty years in annuities','Longevity fund managed like a pension fund — $10M at 10% = $1M a year cascading into liquidity bucket'],
+    fiveYear:'Recruiting machine with an ultimate new co. CEO playbook. Revenue: Achieve $200M in global revenue. Portfolio: Grow Integre Holdings into a $200M enterprise traded on the NYSE. Scale: Build a boutique M&A Firm with a unique relationship driven value add proposition. Facilities: Own and operate state-of-the-art headquarters and innovation centers. Team Development: Employ a world-class executive team driving accountability and results. Market Domination: Be #1 or #2 in every market we serve. Culture: Foster an inclusive, innovative, and high-performance company culture. Legacy: Establish a foundation supporting entrepreneurship and education.'
+  },
+  {
+    id:4, name:'Love', theme:'Giving & legacy', color:'#D4537E', bg:'#FBEAF0', icon:'❤️',
+    vision:'To create a legacy of giving that uplifts humanity, transforms lives, and solves critical issues. By building wealth, I aim to channel resources toward meaningful causes — supporting orphanages, senior homes, and organizations tackling human suffering. My vision is to make positive, lasting changes, influence world policies, and inspire others to join in addressing societal challenges.',
+    purpose:'Every child deserves a chance to dream big, and every person deserves a life of dignity, hope, and joy. My purpose is to empower others to reach their potential and pay it forward, fostering a cycle of positivity and impact. "It matters to that one" guides my actions, ensuring that every effort, no matter how small, contributes to a better future. Through generosity and purpose-driven leadership, I strive to make meaningful, transformative change — one life, one community, and one world at a time.',
+    roles:['Beacon of hope','Savior','Protector','Humble warrior for peace','Man on a mission'],
+    thrive:['Always grow your businesses','Stay connected to your Vision & Purpose','Make meaningful contributions'],
+    resources:'Business profits, team engagement, family engagement, networks, personal engagement',
+    quarterly:['Allocate Funds: Commit $25,000 toward your yearly $50,000 goal','Charity Event: Complete one impactful event (e.g., food drive, toy donation, or educational outreach)','Volunteer Program: Implement a structured program to engage your team and family in service','Partnership Development: Identify and secure partnerships with at least one non-profit'],
+    monthly:[],
+    yearly:['Financial Contribution: Donate $50,000 to impactful causes','Charity Events: Execute two successful events focusing on hunger, education, or elder care','Team Involvement: Create opportunities for employees to volunteer and contribute'],
+    fiveYear:'Charitable Foundation: Launch a self-sustaining organization to support orphanages, senior homes, and humanitarian causes. Donation Milestone: Contribute 10% of business profits annually to impactful initiatives. Charity Gala: Host an annual event uniting companies to drive meaningful change in the community. Mission Journeys: Organize trips with family and teams to directly engage in charitable projects. Policy Influence: Partner with global leaders to advocate for policies addressing human suffering. Philanthropic Network: Build alliances with other changemakers to multiply your impact. Education Initiatives: Fund scholarships or mentorship programs for disadvantaged youth.'
+  },
+  {
+    id:5, name:'Deep Connection', theme:'Family & relationships', color:'#7F77DD', bg:'#EEEDFE', icon:'👨‍👩‍👧‍👧',
+    vision:'Vibrating love and deep connection. Creating a blissful, energetic bond & relationships with Patrycja, Natalia, Nel, my family and community. This alone creates ultimate fulfillment, happiness and purpose.',
+    purpose:'To live the meaning of life today. Now!!!',
+    roles:['Patriarch','Lover','Empathetic listener','Energetic soul','Light in the room','Connector','Servant to others'],
+    thrive:['Patrycja','Natalia','Nel'],
+    resources:'TIME!!, Family retreats & holidays, Emotional Wheel, GTLYW',
+    quarterly:['Retreat with Patrycja: Plan and enjoy a retreat to deepen our bond','Overnight retreat with Natalia','Overnight retreat with Nel','In person retreat with friends','Family travel experience','80% Quality Time with Patrycja','60% Quality Time with Nel','60% Quality Time with Natalia','Commit to Family Blue Print'],
+    monthly:['P&K weekend','Daily Practice from GTLYW','80% Quality Time with Patrycja','60% Quality Time with Nel','60% Quality Time with Natalia'],
+    yearly:['Family Blue Print executed','Road Less Triggered','6 experiences with just Patrycja and me','2 experiences with each daughter one on one (Nel, Natalia)','6 entire family experiences','90% Quality Time with Patrycja','70% Quality Time with Nel','80% Quality Time with Natalia'],
+    fiveYear:'Deep Marital Friendship: Cultivate a best-friend relationship with my wife, experiencing life together with joy and high energy and ultimate connection. Strong Family Bonds: Develop powerful connections with Natalia and Nel, involving them intentionally in life\'s adventures and memory-making. Epic Family Trips: Plan and execute annual family reunions in exciting destinations to create lasting memories. Generational Connection: Bridge generational gaps by fostering understanding and shared experiences among all family members.'
+  },
+  {
+    id:6, name:'Growth', theme:'Learning & leadership', color:'#639922', bg:'#EAF3DE', icon:'📚',
+    vision:'Wise mentor & patriarch with a constant thirst for learning. Explorer of possibilities and abundance. Shaping the values for generations to come.',
+    purpose:'To be an example to my family and community of what\'s possible.',
+    roles:['Humble confidence','Student','Curious'],
+    thrive:['Thinking Time','Daily teachings','Curiosity'],
+    resources:'Morning ritual, Emotional wheel, Third person hack, Daily re-alignment, books, podcasts, coaches, tribe',
+    quarterly:['Read and Implement 3 Books: Focus on specific areas of development by selecting pertinent literature','Attend 1 Learning Event: Participate in an event that offers new insights and opportunities for growth','Complete 1 CEO Course: Enroll in a course that enhances leadership skills relevant to your current goals','Create 12 social media posts'],
+    monthly:['Read and Implement 1 Book: Choose a book that addresses an immediate area for improvement and apply its lessons','Complete 1 CEO Course: Enroll in a course that enhances leadership skills relevant to your current goals','Attend 1 Learning Event: Participate in an event that offers new insights and opportunities for growth','Weekly social media post'],
+    yearly:['Read and Implement 12 Books: Select and apply insights from a diverse range of books to enhance personal and professional growth','Participate in 2 Speaking Engagements: Present at events or forums to build confidence and share knowledge','Enhance Communication Skills: Develop assertiveness and authenticity in interactions to effectively convey your true self','Attend 4 Learning Events: Engage in workshops, seminars, or conferences to expand your knowledge and network','Enroll in 2 CEO/Leadership Courses: Undertake courses designed to refine executive skills and strategic thinking'],
+    fiveYear:'Develop a Social Media Brand: Establish a robust online presence that reflects your expertise and passion for lifelong learning. Become a Sought-After Speaker: Secure speaking engagements on prominent stages, sharing insights as an industry expert. Serve as a Board Member: Contribute to organizations by providing strategic guidance and leadership. Achieve Industry Recognition: Gain acknowledgment as a thought leader in your field through publications, awards, or media features.'
+  },
+  {
+    id:7, name:'Best Friends', theme:'Brotherhood & community', color:'#888780', bg:'#F1EFE8', icon:'🤝',
+    vision:'Don\'t invest in someone based on how much you like them. Invest in who invests in you.',
+    purpose:'To break out of the pattern of trauma of people-pleasing into a path of pure fulfillment.',
+    roles:['True friend','Supporter','Receiver'],
+    thrive:['True Self','Brave','Curious'],
+    resources:'GoBundance, GoPod, Board Members Pod, MicroTribe, YPO, Forum',
+    quarterly:['GoBundance Event','YPO Event','12 calls with Buddy','12 calls with Michael Blank','6 calls with Marzena','12 calls with Kevin Mills','6 calls with Imran'],
+    monthly:['Dinner party','YPO Event','4 calls with Buddy','4 calls with Michael Blank','4 calls with Kevin Mills','4 calls with Imran','2 calls with Marzena'],
+    yearly:['Close Confidants: Cultivate a group of very close confidants with whom I am in touch weekly, serving as my personal hi board of advisors','New YPO Connections: Establish new, close connections with YPO members, expanding my network of supportive and inspiring individuals','Authentic Expression: Commit to being more honest with my feelings, expressing my true thoughts and ideas courageously, without tailoring them to others\' expectations'],
+    fiveYear:'Traveling with Close Couples: Establish a group of four couples with whom we travel the world in style, creating shared memories and deepening our bonds. Integrated Business and Life Partners: Develop partnerships with four individuals who are both friends and business collaborators, enjoying success and fun in both arenas. Family Integration: Foster close relationships among our families, ensuring our children grow up together, sharing experiences and values. Deepened Relationship Intimacy: Continuously explore and enhance the depth and intimacy of our relationships, promoting mutual growth and understanding.'
+  }
+];
+
+// ============================================================
+// SEEDS — initial journal content
+// Buckets: cq=current quarter, lq=last quarter, ly=last year, 3y=last 3 years
+// ============================================================
+const SEEDS = {
+  // cq: Q3 2026 — Jul through Sep 2026 (current)
+  cq:{
+    mem:[],
+    mov:[
+      'This war is even harder than the last one last year',
+      '72 hours of murderous work in Cabo',
+      'Maggie Furlough, Steve and Mark move to production',
+      'Kodi, Erika, Marcus — all laid off',
+      'B&B completely out of cash',
+      'War room in Cabo end of June'
+    ],
+    mag:[
+      '$120,000 check from Camden Cove'
+    ]
+  },
+  // tq: Q1 2026 — Jan through Mar 2026
+  tq:{
+    mem:[
+      'Winter classic with Natalia',
+      'Allysa\'s birthday in Cabo (best for Patrycja)',
+      'Company Christmas party in AC',
+      'Fambundance skiing with Nel',
+      'Winter GoBundance',
+      'Cadillac F1 unveiling in Times Square and the belly laughs',
+      'Nail day with Nel — nails, bao buns, music, laughs',
+      'Weekend with Buddy in Stewart FL',
+      'Harry pop up with Natalia in Brooklyn',
+      'Ultra Miami'
+    ],
+    mov:[
+      'Dawid and Meggie starting',
+      'NTRS Annual meeting',
+      'NTRS Marketing Strategy meeting',
+      'Home shows and Non-Traditional Marketing Mgr',
+      'Jessi as new CSR',
+      'Introduced Beegan to the team',
+      'First Home Show for B&B Siding & Roofing',
+      'Negotiations with Beegan',
+      'Running out of cash flow again at NuTek — forced decisive action',
+      'Harvest ROI onboarded',
+      'NuTek accountability chart rollout',
+      'New B&B sales manager — this one should work',
+      'Very deep alignment conversation with John',
+      'New service tech hired',
+      'Presented Stevie J with opportunity as service manager at NuTek',
+      'Fired Jasmine',
+      'Rolling out surveys and checks for NTRS',
+      'Negotiations with Tim and W-2',
+      'B&B Siding and Roofing March ultimate goals',
+      'Walter starting as Special Projects Manager at NuTek',
+      'Completion of another successful home show — 31 leads for B&B',
+      'Ryan closing over 50%',
+      'NTRS all-company meeting',
+      'Meeting with Tremco',
+      'IT department standardization',
+      'Cornerstone creating 15 appointments a week as benchmark',
+      'New norm: 20+ appointments a week',
+      'Four consecutive six-figure sales weeks'
+    ],
+    mag:[
+      'Great month for the relationship',
+      'Ups and downs in the relationship but continuity working through it',
+      '10 out of 10 score at YPO March meeting — great weekend with Patrycja and deep connection with Nel during her rib injury',
+      'Penalty box at the Rangers',
+      'Psychedelics Saturday with Dave',
+      'Anniversary dinner with Patrycja in NYC',
+      'Natalia getting caked by Steve Aoki',
+      'Ultra John Summit set',
+      'Neetoh scavenger hunt and head spa with Nel — she said it was her best day ever'
+    ]
+  },
+  // lq: Q2 2026 — Apr through Jun 2026
+  lq:{
+    mem:[
+      'Great adventure with Nel',
+      'Great adventure days in the city with Patrycja and Taya',
+      'Bali couples trip',
+      'YPO forum in Curaçao',
+      'Great adventure with Nel',
+      'Great adventure days in the city with Patrycja and Taya',
+    ],
+    mov:[
+      'New Tech Quarterly Meeting — Financial and Business Engine Team Alignment',
+      'New sales training class completed',
+      'London (Fam Only)',
+      'Cabo with fam only',
+      'Sales manager either optimized or search started',
+      'New sales training class completed',
+      'Hamptons',
+      'Set up board members retreat',
+      'New sales class running',
+      '3 cheat days ONLY',
+      '212 lbs walk around weight',
+      'Best month for B&B in 3 years at $566k',
+      'Signed up insurance for NY (NTRS)',
+      'John T resigned',
+      'Building accounting business engine',
+      'Nu-Tek quarterly meeting executed',
+      'Michael Blank',
+      'Quarterly meetings for the business',
+      'Rolling out a bid a day this week at NuTek',
+      'Record appointment week with 26 — could have been well over 30 but we didn\'t effectively plan at the beginning of the week',
+      'Started working on mid-level management agent',
+      'HubSpot clean up underway — Jessi made huge strides',
+      '$2.1 million dollar week at NTRS (first week in April)',
+      '6 weeks of 6 figure sales for B&B',
+      'Cornerstone is crushing it',
+      '$350K opportunity for B&B HOA',
+      'Other large opportunities for B&B',
+      'Claude board meeting prep'
+    ],
+    mag:[
+      'Magical birthday weekend with Patrycja (Long Branch)',
+      'Cabo weekend with friends',
+      'Great work through conflict with Patrycja and a great week overall — unpacking traveling anxiety for her',
+      'Great day with Natalia & Patrycja in the city — margaritas & Italian dinner',
+      'Journal entry from April 12th — what it means to achieve this success !!!!!!',
+      'Hamptons — bike rides, cafes',
+      'London Harry Styles Trop'
+    ]
+  },
+  // ly: 2025 + Q1 2026 (Jan-Mar rolled into here)
+  ly:{
+    mem:[
+      'Fambundance with Nel',
+      'Natalia\'s birthday',
+      'Skiing Camelback with Nel',
+      'Ultra Music Fest Miami',
+      'Forum retreat',
+      'Cabo Tribal Council',
+      'Imran\'s birthday',
+      'Cincinnati Reds game with the fam',
+      'Race day with Buddy',
+      'Teddy Swims with fam',
+      'Szerszen wedding',
+      'Nel\'s dance competition in AC',
+      'Tiesto HQ2 and Journey',
+      'Swedish House Mafia',
+      'San Gennaro Fest',
+      'Poland Inter Trip',
+      'YPO Red Bulls game',
+      'Polish Parade',
+      'Lake Louise GB Event',
+      'Cabo Fam Reunion',
+      'F1 Las Vegas'
+    ],
+    mov:[
+      'Tampa Champions meeting',
+      'Miami Board Meeting',
+      'Mike coming back and staying long term',
+      'NERCA',
+      'Business Mastery',
+      'Top Rep Sales Training',
+      'B&B Annual Meeting x2',
+      'CRO for B&B Siding and Roofing',
+      'Marketing company change for B&B Siding',
+      'Very high level hires for NTRS',
+      'LOI Farrell Roofing',
+      'Got back into sales',
+      'Changed my sales department',
+      'Leading through mid-level management',
+      '$12M in sales',
+      'Financial team process 7-day close',
+      '$3M pipeline for 2026 NTRS',
+      'Leaning into AI',
+      'Meeting and offer from PE',
+      'Blue Carpet'
+    ],
+    mag:[
+      'Battle on the Boardwalk Champion',
+      'Patrycja Muse experience',
+      'Getting the Love You Want with Patrycja',
+      'Turtle Island and the magical day at the beach',
+      'Fisher concert with Natalia',
+      'Natalia\'s prom',
+      'Natalia getting accepted to NYU',
+      'Natalia\'s graduation',
+      'The perfect day',
+      'Date with Destiny',
+      'Family Christmas',
+      'Disney with Nel'
+    ]
+  },
+  // 3y: 2023-2024 deeper history
+  '3y':{
+    mem:[
+      'Building Integre Holdings from the ground up',
+      'Nu-Tek turnaround years',
+      'First B&B acquisition',
+      'Watching Natalia go from high school to NYU',
+      'Nel turning 13'
+    ],
+    mov:[
+      'Nu-Tek: $4.53M to $10.8M revenue growth',
+      'Nu-Tek: $1.33M net profit in FY25 — first profitable year',
+      'B&B acquisition and integration',
+      'Building EOS cadence across both companies',
+      'First M&A LOI on Farrell Roofing',
+      'Discovery of a resilient self',
+      'Leading through major business change',
+      'Exercising the weakest side — comfortable being uncomfortable with difficult conversations',
+      'Letting go of key people with grace'
+    ],
+    mag:[
+      'Mind shift around the relationship with Patrycja and family',
+      'Courage to have the difficult conversations',
+      'Letting go of key people with grace',
+      'Leaning into major business change'
+    ]
+  }
+};
+
+// ============================================================
+// METRIC PATTERNS — auto-parse from check-in notes
+// ============================================================
+const METRIC_PATTERNS = [
+  {re:/b&b\s+rev(?:enue)?\s*[:\-=]?\s*\$?([\d,\.]+[km]?)/i, id:'bb_rev', label:'B&B revenue'},
+  {re:/b&b\s+net\s*[:\-=]?\s*\$?([\d,\.]+[km]?)/i, id:'bb_net', label:'B&B net'},
+  {re:/b&b\s+appt\w*\s*[:\-=]?\s*([\d,]+)/i, id:'bb_appt', label:'B&B appointments'},
+  {re:/rpa\s*[:\-=]?\s*\$?([\d,\.]+[km]?)/i, id:'bb_rpa', label:'RPA'},
+  {re:/nu[\-\s]?tek\s+rev(?:enue)?\s*[:\-=]?\s*\$?([\d,\.]+[km]?)/i, id:'nt_rev', label:'Nu-Tek revenue'},
+  {re:/nu[\-\s]?tek\s+net\s*[:\-=]?\s*\$?([\d,\.]+[km]?)/i, id:'nt_net', label:'Nu-Tek net'},
+  {re:/ntrs\s+rev(?:enue)?\s*[:\-=]?\s*\$?([\d,\.]+[km]?)/i, id:'nt_rev', label:'Nu-Tek revenue'}
+];
+
+function parseMoney(s){s=s.replace(/,/g,'');if(/k$/i.test(s))return parseFloat(s)*1000;if(/m$/i.test(s))return parseFloat(s)*1000000;return parseFloat(s);}
+function fmtVal(v,u){if(u==='$'){if(v>=1000000)return '$'+(v/1000000).toFixed(2)+'M';if(v>=1000)return '$'+Math.round(v/1000)+'K';return '$'+v.toLocaleString();}if(u==='#')return '#'+v.toLocaleString();return v;}
+function parseMetrics(note){const r=[];METRIC_PATTERNS.forEach(p=>{const m=note.match(p.re);if(m){const v=parseMoney(m[1]);if(!isNaN(v))r.push({id:p.id,val:v,label:p.label});}});return r;}
+
+// ============================================================
+// STATE
+// ============================================================
+const STORAGE_KEY = 'kml_os19';
+const DATA_VERSION = 19;
+
+// Build default journal from SEEDS — always fresh
+function buildDefaultJournal(){
+  const j = {};
+  Object.keys(SEEDS).forEach(hid=>{
+    Object.keys(SEEDS[hid]).forEach(tid=>{
+      j[hid+'_'+tid] = [...SEEDS[hid][tid]];
+    });
+  });
+  return j;
+}
+
+let S = {
+  activeCat:null, activePeriod:{}, activeMMMType:{},
+  checked:{},metrics:{},scores:{},notes:{},
+  savedWeeks:[],
+  journal: buildDefaultJournal(),
+  lastRolloverQuarter:null, lastRolloverYear:null,
+  _version: DATA_VERSION
+};
+
+// Nuke all old storage keys from previous versions
+['kml_os','kml_os2','kml_os3','kml_os4','kml_os5','kml_os6','kml_os7','kml_os8','kml_os9','kml_os10','kml_os11','kml_os12','kml_os13','kml_os14','kml_os15','kml_os16','kml_os17','kml_os18'].forEach(k=>{
+  try{localStorage.removeItem(k);}catch(e){}
+});
+
+// Load saved state — seeds always win, user additions merge on top
+try{
+  const d=localStorage.getItem(STORAGE_KEY);
+  if(d){
+    const parsed=JSON.parse(d);
+    if(parsed._version && parsed._version === DATA_VERSION){
+      const {journal: savedJournal, ...rest} = parsed;
+      // Restore non-journal state (scores, checks, notes etc)
+      S = {...S, ...rest};
+      // Journal: start from seeds, then add any user-added entries on top
+      if(savedJournal){
+        Object.keys(savedJournal).forEach(k=>{
+          const seedEntries = S.journal[k] || [];
+          const savedEntries = savedJournal[k] || [];
+          // Find entries the user added (not in seed)
+          const userAdded = savedEntries.filter(e => !seedEntries.includes(e));
+          if(userAdded.length > 0){
+            S.journal[k] = [...userAdded, ...seedEntries];
+          }
+          // If saved has fewer entries than seed, seed wins (don't use saved)
+        });
+      }
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }
+}catch(e){localStorage.removeItem(STORAGE_KEY);}
+
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(S));}catch(e){}}
+
+function getJournal(hid,tid){
+  const k=hid+'_'+tid;
+  if(!S.journal[k]) S.journal[k]=[];
+  return S.journal[k];
+}
+
+// ============================================================
+// ROLLOVER — auto-archives when quarter/year turns
+// ============================================================
+function checkRollover(){
+  const now = new Date();
+  const qKey = getQuarterKey(now);
+  const yKey = getYearKey(now);
+  let rolledQ = false, rolledY = false;
+
+  // ── QUARTER ROLLOVER ─────────────────────────────────────────────────────
+  // Tracks which quarter we last rolled into using a persistent key
+  // so it works correctly every quarter forever into the future
+  const QUARTER_ENDS = getQuarterEnds();
+  const passedQEnd = QUARTER_ENDS.find(qe => {
+    const nextDay = new Date(qe.getTime() + 86400000);
+    const nextQKey = getQuarterKey(nextDay);
+    return now > qe && S.lastRolloverQuarter !== nextQKey;
+  });
+
+  if(passedQEnd){
+    const nextDay = new Date(passedQEnd.getTime() + 86400000);
+    const newQKey = getQuarterKey(nextDay);
+
+    ['mem','mov','mag'].forEach(t => {
+      // Step 1: tq -> ly (two quarters ago cascades into last year)
+      const tqEntries = [...(S.journal['tq_'+t] || SEEDS.tq[t] || [])];
+      if(tqEntries.length){
+        if(!S.journal['ly_'+t]) S.journal['ly_'+t] = [...(SEEDS.ly[t]||[])];
+        S.journal['ly_'+t] = [...tqEntries, ...S.journal['ly_'+t]];
+      }
+
+      // Step 2: lq -> tq (last quarter becomes two quarters ago)
+      const lqEntries = [...(S.journal['lq_'+t] || SEEDS.lq[t] || [])];
+      if(t === 'mov'){
+        // Archive completed quarterly goals into lq before it cascades
+        CATS.forEach(cat => {
+          const qGoals = getUserGoals(cat.id,'quarterly');
+          qGoals.filter(g=>g.done && g.type==='goal').forEach(g=>{
+            lqEntries.unshift('[Q goal] ' + g.label);
+          });
+        });
+      }
+      S.journal['tq_'+t] = lqEntries.length ? lqEntries : [];
+
+      // Step 3: cq -> lq (current quarter becomes last quarter)
+      const cqEntries = [...(S.journal['cq_'+t] || SEEDS.cq[t] || [])];
+      S.journal['lq_'+t] = cqEntries.length ? cqEntries : [];
+
+      // Step 4: cq resets to empty for new quarter
+      S.journal['cq_'+t] = [];
+    });
+
+    // Reset quarterly goals and metrics
+    Object.keys(S.checked).forEach(k=>{if(k.includes('_quarterly_'))delete S.checked[k];});
+    Object.keys(S.metrics).forEach(k=>{ if(!k.endsWith('_mo')) delete S.metrics[k]; });
+    // Reset quarterly userGoals for new quarter
+    if(S.userGoals){
+      Object.keys(S.userGoals).forEach(k=>{
+        if(k.includes('_quarterly_')) delete S.userGoals[k];
+      });
+    }
+
+    S.lastRolloverQuarter = newQKey;
+    rolledQ = true;
+    save();
+  }
+
+  // ── YEAR ROLLOVER ────────────────────────────────────────────────────────
+  // Fires once per year, cascades ly -> 3y
+  // Works correctly every year forever into the future
+  if(S.lastRolloverYear !== yKey){
+    const lastYear = parseInt(yKey) - 1;
+    const yearEnd = new Date(lastYear, 11, 31);
+    if(now > yearEnd){
+      ['mem','mov','mag'].forEach(t=>{
+        // ly -> 3y
+        const lyEntries = [...(S.journal['ly_'+t] || SEEDS.ly[t] || [])];
+        if(lyEntries.length){
+          if(!S.journal['3y_'+t]) S.journal['3y_'+t]=[...(SEEDS['3y'][t]||[])];
+          // Keep 3y from growing unbounded — cap at 200 entries per type
+          S.journal['3y_'+t]=[...lyEntries,...S.journal['3y_'+t]].slice(0,200);
+        }
+        S.journal['ly_'+t]=[];
+      });
+      // Reset yearly goals
+      Object.keys(S.checked).forEach(k=>{if(k.includes('_yearly_'))delete S.checked[k];});
+      if(S.userGoals){
+        Object.keys(S.userGoals).forEach(k=>{
+          if(k.includes('_yearly_')) delete S.userGoals[k];
+        });
+      }
+      S.lastRolloverYear = yKey;
+      rolledY = true;
+      save();
+    }
+  }
+
+  if(rolledQ||rolledY){
+    const b=document.getElementById('rollover-banner');
+    b.style.display='block';
+    b.innerHTML=`<b>New period, fresh start.</b> Your journal has been archived and ${currentQuarterLabel()} is ready. Completed goals were logged as Moves.`;
+    setTimeout(()=>b.style.display='none',8000);
+  }
+  // Check if we need to show month-end review
+  checkMonthEndReview();
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+let pendingLog = null;
+let pendingLogType = 'mov'; // default type for modal
+
+function showPage(p,btn){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('on'));
+  document.getElementById('page-'+p).classList.add('on');
+  if(btn)btn.classList.add('on');
+  if(p==='journal')renderJournal();
+  if(p==='report')renderReport();
+  if(p==='weekly')renderWeekly();
+}
+
+// ============================================================
+// HOME / LIFE PLAN
+// ============================================================
+// ── USER GOAL STORAGE ──────────────────────────────────────────────────────
+// Goals are stored per category per period per period-key (e.g. "2026-04" for monthly, "2026-Q2" for quarterly)
+function periodKey(period){
+  const now = new Date();
+  if(period==='monthly') return now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  if(period==='quarterly') return now.getFullYear()+'-Q'+getQuarterNum(now);
+  if(period==='yearly') return String(now.getFullYear());
+  return 'static';
+}
+
+function userGoalKey(catId, period){
+  return 'goals_'+catId+'_'+period+'_'+periodKey(period);
+}
+
+function getUserGoals(catId, period){
+  const key = userGoalKey(catId, period);
+  if(!S.userGoals) S.userGoals = {};
+  if(!S.userGoals[key]){
+    // Seed from CATS template
+    const cat = CATS.find(c=>c.id===catId);
+    const template = cat ? (cat[period]||[]) : [];
+    S.userGoals[key] = template.map((g,i)=>({
+      id: 'g_'+catId+'_'+period+'_'+i+'_'+Date.now(),
+      label: typeof g==='string' ? g : g.label,
+      type: (typeof g==='object' && g.type==='metric') ? 'metric' : 'goal',
+      metricId: typeof g==='object' ? g.id : null,
+      target: typeof g==='object' ? g.target : null,
+      unit: typeof g==='object' ? g.unit : null,
+      done: false,
+      addedAt: Date.now()
+    }));
+    save();
+  }
+  return S.userGoals[key];
+}
+
+function getSimpleGoals(cat,period){
+  const goals = getUserGoals(cat.id, period);
+  return goals.map(g=>g.label);
+}
+function getGoalDefs(cat,period){
+  return getUserGoals(cat.id, period).map((g,i)=>({...g, idx:i}));
+}
+
+function addUserGoal(catId, period, label){
+  if(!label.trim()) return;
+  const key = userGoalKey(catId, period);
+  if(!S.userGoals) S.userGoals = {};
+  if(!S.userGoals[key]) getUserGoals(catId, period);
+  S.userGoals[key].push({
+    id: 'g_'+catId+'_'+Date.now(),
+    label: label.trim(),
+    type: 'goal',
+    done: false,
+    addedAt: Date.now()
+  });
+  save(); renderCatGrid(); renderCatDetail();
+}
+
+function deleteUserGoal(catId, period, goalId){
+  const key = userGoalKey(catId, period);
+  if(!S.userGoals || !S.userGoals[key]) return;
+  S.userGoals[key] = S.userGoals[key].filter(g=>g.id!==goalId);
+  save(); renderCatGrid(); renderCatDetail();
+}
+
+function editUserGoal(catId, period, goalId, newLabel){
+  const key = userGoalKey(catId, period);
+  if(!S.userGoals || !S.userGoals[key]) return;
+  const g = S.userGoals[key].find(g=>g.id===goalId);
+  if(g) { g.label = newLabel; save(); }
+}
+
+// Monthly contribution to quarterly: count done monthly goals this quarter
+function monthlyContribToQuarter(catId){
+  const now = new Date();
+  const q = getQuarterNum(now);
+  const y = now.getFullYear();
+  const qStartMonth = (q-1)*3+1; // 1,4,7,10
+  let done=0, total=0;
+  for(let m=qStartMonth; m<qStartMonth+3; m++){
+    const mk = 'goals_'+catId+'_monthly_'+y+'-'+String(m).padStart(2,'0');
+    if(S.userGoals && S.userGoals[mk]){
+      S.userGoals[mk].forEach(g=>{ if(g.type!=='metric'){total++;if(g.done)done++;} });
+    }
+  }
+  return {done, total};
+}
+
+function renderCatGrid(){
+  const now = new Date();
+  document.getElementById('home-sub').textContent = currentQuarterLabel(now) + ' · ' + currentMonthLabel(now) + ' · 7 categories';
+  document.getElementById('cat-grid').innerHTML=CATS.map(cat=>{
+    const goals=getUserGoals(cat.id,'quarterly');
+    const done=goals.filter(g=>g.done).length;
+    const dots=goals.filter(g=>g.type!=='metric').map(g=>`<div class="cpd ${g.done?'done':''}"></div>`).join('');
+    return `<div class="cat-card ${S.activeCat===cat.id?'on':''}" onclick="openCat(${cat.id})">
+      <div class="cat-accent" style="background:${cat.color}"></div>
+      <div class="cat-num">0${cat.id}</div>
+      <div class="cat-name">${cat.name}</div>
+      <div class="cat-theme">${cat.theme}</div>
+      <div class="cat-prog">${dots}</div>
+      <div class="cat-frac">${done}/${goals.length} goals</div>
+    </div>`;
+  }).join('');
+}
+
+function openCat(catId){
+  S.activeCat=catId;
+  if(!S.activePeriod[catId])S.activePeriod[catId]='quarterly';
+  save();renderCatGrid();renderCatDetail();
+  document.getElementById('cat-detail').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function renderGoalRows(goals, catId, period, storeKey, color, readOnly){
+  // readOnly = true for previous-period grace window (can check off but not add/delete)
+  let html = '';
+  goals.forEach((g,i)=>{
+    if(g.type==='metric'){
+      const mid = g.metricId||g.id||'';
+      const cur = S.metrics[mid]||0;
+      const mpct = g.target?Math.min(100,Math.round((cur/g.target)*100)):0;
+      html+=`<div class="metric-goal"><div class="metric-top"><div class="metric-lbl">${g.label}</div>`
+          +(readOnly?`<div style="font-size:13px;font-weight:500;color:var(--text2)">${cur>0?fmtVal(cur,g.unit):'—'}</div>`
+           :`<input class="metric-inp" type="text" value="${cur>0?cur:''}" placeholder="${fmtVal(g.target,g.unit)}" onchange="updateMetric('${mid}',${catId},'${period}',${i},this.value,'${g.label.replace(/'/g,"\'")}','${g.unit}',${g.target})">`)
+          +`</div><div class="metric-prog"><div class="metric-bar" style="width:${mpct}%;background:${color}"></div></div><div class="metric-pct">${mpct}% of target</div></div>`;
+    } else {
+      const glabel = g.label.replace(/"/g,'&quot;').replace(/</g,'&lt;');
+      const sk = storeKey ? `'${storeKey}'` : 'undefined';
+      if(readOnly){
+        // Grace window: can check off but cannot edit text or delete
+        html+=`<div class="goal-edit-row" style="opacity:${g.done?0.6:1}">
+          <div class="gcheck ${g.done?'on':''}" onclick="toggleUserGoalByIndex(${catId},'${period}',${i},${sk})"></div>
+          <div class="gtext ${g.done?'done':''}" style="font-size:13px;flex:1;line-height:1.5">${g.label}</div>
+        </div>`;
+      } else {
+        html+=`<div class="goal-edit-row">
+          <div class="gcheck ${g.done?'on':''}" onclick="toggleUserGoalByIndex(${catId},'${period}',${i},${sk})"></div>
+          <input class="goal-edit-inp" value="${glabel}" style="${g.done?'text-decoration:line-through;color:var(--text3)':''}"
+            onblur="editUserGoalByIndex(${catId},'${period}',${i},this.value,${sk})">
+          <button class="goal-del-btn" onclick="deleteUserGoalByIndex(${catId},'${period}',${i},${sk})">&#215;</button>
+        </div>`;
+      }
+    }
+  });
+  return html;
+}
+
+function renderCatDetail(){
+  const cat=CATS.find(c=>c.id===S.activeCat);
+  if(!cat){document.getElementById('cat-detail').innerHTML='';return;}
+  const period=S.activePeriod[cat.id]||'quarterly';
+  const rolesHtml=cat.roles.map(r=>`<span class="tag" style="background:${cat.bg};color:${cat.color}">${r}</span>`).join('');
+  const thriveHtml=cat.thrive.map(t=>`<span class="tag" style="background:var(--surface2);color:var(--text2);border:0.5px solid var(--border)">${t}</span>`).join('');
+  const periodLabels = {monthly:currentMonthLabel(), quarterly:currentQuarterLabel(), yearly:new Date().getFullYear()+' goals', fiveyear:'5-year vision'};
+
+  let goalsHtml='';
+  if(period==='fiveyear'){
+    goalsHtml=`<div style="padding:8px 16px 4px"><div class="sl" style="margin-bottom:0">5-year vision</div></div><div class="fiveyear-box">${cat.fiveYear}</div>`;
+  } else {
+    // ── CURRENT PERIOD ──────────────────────────────────────────────────────
+    const goals = getUserGoals(cat.id, period);
+    const doneCount = goals.filter(g=>g.done&&g.type!=='metric').length;
+    const totalCount = goals.filter(g=>g.type!=='metric').length;
+    const pct = totalCount ? Math.round((doneCount/totalCount)*100) : 0;
+
+    let contribHtml = '';
+    if(period==='quarterly'){
+      const contrib = monthlyContribToQuarter(cat.id);
+      if(contrib.total>0) contribHtml = `<div class="period-summary"><div class="period-summary-label">Monthly goals this quarter</div><div class="period-summary-pct">${contrib.done}/${contrib.total}</div></div>`;
+    }
+    if(period==='monthly'){
+      const qGoals = getUserGoals(cat.id,'quarterly');
+      const qDone = qGoals.filter(g=>g.done).length;
+      if(qGoals.length>0) contribHtml = `<div class="period-summary"><div class="period-summary-label">Quarterly progress</div><div class="period-summary-pct">${qDone}/${qGoals.length} Q goals done</div></div>`;
+    }
+
+    const summaryBar = totalCount ? `<div style="padding:0 16px 10px">
+      <div style="height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-bottom:5px">
+        <div style="height:100%;width:${pct}%;background:${cat.color};border-radius:2px;transition:width .4s"></div>
+      </div>
+      <div style="font-size:11px;color:var(--text3)">${doneCount} of ${totalCount} &middot; ${pct}% complete</div>
+    </div>` : '';
+
+    const currentGoalRows = renderGoalRows(goals, cat.id, period, null, cat.color, false);
+
+    const addRow = `<div class="add-goal-row">
+      <input class="add-goal-inp" id="aginp${cat.id}${period}" placeholder="Add a goal..."
+        onkeydown="if(event.key==='Enter'){addUserGoal(${cat.id},'${period}',this.value);this.value='';}">
+      <button class="add-goal-btn" onclick="var el=document.getElementById('aginp${cat.id}${period}');addUserGoal(${cat.id},'${period}',el.value);el.value=''">+ Add</button>
+    </div>`;
+
+    // ── PREVIOUS PERIOD GRACE WINDOW ─────────────────────────────────────
+    // Shows last period's goals below current, so you can still check them off
+    let graceHtml = '';
+    if(period !== 'fiveyear'){
+      const {goals:prevGoals, storeKey:prevKey} = getPrevGoals(cat.id, period);
+      const prevIncomplete = prevGoals.filter(g=>!g.done && g.type!=='metric');
+      const prevDone = prevGoals.filter(g=>g.done && g.type!=='metric').length;
+      const prevTotal = prevGoals.filter(g=>g.type!=='metric').length;
+      if(prevGoals.length > 0){
+        const prevRows = renderGoalRows(prevGoals, cat.id, period, prevKey, cat.color, true);
+        const prevPct = prevTotal ? Math.round((prevDone/prevTotal)*100) : 0;
+        graceHtml = `<div style="margin:0 16px 16px;border-top:0.5px dashed var(--border);padding-top:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)">${prevPeriodLabel(period)} &mdash; previous period</div>
+            <div style="font-size:11px;color:${prevIncomplete.length===0?'var(--mov)':'var(--text3)'};">${prevDone}/${prevTotal} done${prevIncomplete.length===0?' ✓':''}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">${prevRows}</div>
+        </div>`;
+      }
+    }
+
+    goalsHtml = `<div style="padding:8px 16px 4px"><div class="sl" style="margin-bottom:0">${periodLabels[period]}</div></div>
+      ${summaryBar}${contribHtml}
+      <div class="goals-list" style="gap:6px">${currentGoalRows}</div>
+      ${addRow}
+      ${graceHtml}`;
+  }
+
+  document.getElementById('cat-detail').innerHTML=`
+    <div class="card" style="margin-bottom:20px">
+      <div class="detail-header">
+        <div class="detail-icon" style="background:${cat.bg}">${cat.icon}</div>
+        <div><div class="detail-name">${cat.name}</div><div class="detail-theme">${cat.theme}</div></div>
+      </div>
+      <div class="info-block"><div class="info-lbl">Vision</div><div class="info-txt it">${cat.vision}</div></div>
+      <div class="info-block"><div class="info-lbl">Purpose</div><div class="info-txt">${cat.purpose}</div></div>
+      <div class="info-block"><div class="info-lbl">Roles</div><div class="tags-wrap">${rolesHtml}</div></div>
+      <div class="info-block"><div class="info-lbl">3 to thrive</div><div class="tags-wrap">${thriveHtml}</div></div>
+      <div class="info-block" style="border-bottom:none"><div class="info-lbl">Resources</div><div class="info-txt">${cat.resources}</div></div>
+      <div class="period-tabs">
+        ${['monthly','quarterly','yearly','fiveyear'].map(p=>`<button class="ptab ${period===p?'on':''}" onclick="switchPeriod(${cat.id},'${p}')">${p==='fiveyear'?'5-yr':p==='yearly'?'1-yr':p==='monthly'?'month':'quarter'}</button>`).join('')}
+      </div>
+      ${goalsHtml}
+    </div>`;
+}
+
+function switchPeriod(catId,period){S.activePeriod[catId]=period;save();renderCatDetail();}
+
+// ── INDEX-BASED GOAL OPERATIONS (safe, no string-escaping issues) ──────────
+function toggleUserGoalByIndex(catId, period, idx, prevPeriodKey){
+  const key = prevPeriodKey || userGoalKey(catId, period);
+  if(!S.userGoals) S.userGoals={};
+  if(!S.userGoals[key]) return;
+  const g = S.userGoals[key][idx];
+  if(!g) return;
+  const wasDone = g.done;
+  g.done = !wasDone;
+  save(); renderCatGrid(); renderCatDetail();
+  if(!wasDone){
+    pendingLog={label:g.label, horizon:'cq'};
+    pendingLogType = 'mov';
+    document.getElementById('modal-title').textContent = 'Log to journal?';
+    document.getElementById('modal-yes-btn').textContent = 'Yes, add to Moves';
+    document.getElementById('modal-yes-btn').style.display='';
+    document.getElementById('modal-skip').style.display='';
+    document.getElementById('modal-body').textContent='"'+g.label+'" — add this to your Moves journal?';
+    document.getElementById('modal').classList.add('on');
+  }
+}
+
+function editUserGoalByIndex(catId, period, idx, newLabel, prevPeriodKey){
+  const key = prevPeriodKey || userGoalKey(catId, period);
+  if(!S.userGoals || !S.userGoals[key]) return;
+  const g = S.userGoals[key][idx];
+  if(g && newLabel.trim()) { g.label = newLabel.trim(); save(); }
+}
+
+function deleteUserGoalByIndex(catId, period, idx, prevPeriodKey){
+  const key = prevPeriodKey || userGoalKey(catId, period);
+  if(!S.userGoals || !S.userGoals[key]) return;
+  S.userGoals[key].splice(idx,1);
+  save(); renderCatGrid(); renderCatDetail();
+}
+
+function toggleUserGoal(catId, period, goalId, label){
+  // Legacy — kept for any old references
+  if(!S.userGoals) S.userGoals={};
+  const key = userGoalKey(catId, period);
+  if(!S.userGoals[key]) return;
+  const idx = S.userGoals[key].findIndex(g=>g.id===goalId);
+  if(idx>=0) toggleUserGoalByIndex(catId, period, idx);
+}
+
+// Keep for backward compat
+function toggleGoal(key,catId,period,idx,label){ toggleUserGoal(catId,period,key,label); }
+
+// ── PREVIOUS PERIOD KEY — for grace-window goal view ───────────────────────
+function prevPeriodKey(period){
+  const now = new Date();
+  if(period==='monthly'){
+    const d = new Date(now.getFullYear(), now.getMonth()-1, 1);
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+  }
+  if(period==='quarterly'){
+    const q = getQuarterNum(now);
+    if(q===1) return (now.getFullYear()-1)+'-Q4';
+    return now.getFullYear()+'-Q'+(q-1);
+  }
+  if(period==='yearly') return String(now.getFullYear()-1);
+  return null;
+}
+
+function prevPeriodLabel(period){
+  const now = new Date();
+  if(period==='monthly'){
+    const d = new Date(now.getFullYear(), now.getMonth()-1, 1);
+    return d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  }
+  if(period==='quarterly'){
+    const q = getQuarterNum(now);
+    if(q===1) return 'Q4 '+(now.getFullYear()-1);
+    return 'Q'+(q-1)+' '+now.getFullYear();
+  }
+  if(period==='yearly') return String(now.getFullYear()-1);
+  return '';
+}
+
+function getPrevGoals(catId, period){
+  const pk = prevPeriodKey(period);
+  if(!pk) return [];
+  const storeKey = 'goals_'+catId+'_'+period+'_'+pk;
+  if(S.userGoals && S.userGoals[storeKey]) return {goals: S.userGoals[storeKey], storeKey};
+  return {goals:[], storeKey};
+}
+
+function updateMetric(metricId,catId,period,idx,rawVal,label,unit,target){
+  const val=parseMoney(rawVal.replace(/[$#,]/g,''));
+  if(isNaN(val))return;
+  S.metrics[metricId]=val;save();renderCatDetail();
+  const pct=target?Math.round((val/target)*100):0;
+  if(pct>=100){
+    pendingLog={label:label+' — target hit ('+fmtVal(val,unit)+')', horizon:'cq'};
+    pendingLogType = 'mov';
+    document.getElementById('modal-title').textContent = 'Target hit! 🎯';
+    document.getElementById('modal-yes-btn').textContent = 'Yes, add to Moves';
+    document.getElementById('modal-yes-btn').style.display='';
+    document.getElementById('modal-body').textContent=`"${label}" hit its target at ${fmtVal(val,unit)}. Add to your Moves journal?`;
+    document.getElementById('modal').classList.add('on');
+  }
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('on');pendingLog=null;}
+
+function confirmLog(){
+  if(!pendingLog)return;
+  const horizon = pendingLog.horizon || 'cq';
+  const k = horizon + '_' + pendingLogType;
+  if(!S.journal[k])S.journal[k]=[...(SEEDS[horizon]?.[pendingLogType]||[])];
+  S.journal[k].unshift(pendingLog.label);
+  save();closeModal();
+}
+
+// ============================================================
+// WEEKLY CHECK-IN
+// ============================================================
+function renderWeekly(){
+  const now = new Date();
+  document.getElementById('weekly-sub').textContent = 'Score each area · ' + currentMonthLabel(now);
+  document.getElementById('weekly-cards').innerHTML=CATS.map(cat=>{
+    const score=S.scores[cat.id]||0;
+    const note=S.notes[cat.id]||'';
+    const parsed=note?parseMetrics(note):[];
+    const parsedHtml=parsed.length?`<div class="parsed-metrics">${parsed.map(p=>`<span class="parsed-pill">${p.label}: ${fmtVal(p.val,'$')}</span>`).join('')}</div>`:'';
+    const btns=[1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="sbtn ${score===n?'on':''}" onclick="setScore(${cat.id},${n},this)">${n}</button>`).join('');
+    return `<div class="week-card">
+      <div class="week-head">
+        <div><div class="wcat-name">${cat.name}</div><div class="wcat-theme">${cat.theme}</div></div>
+        <div class="score-row">${btns}</div>
+      </div>
+      <textarea class="week-ta" placeholder="Win or focus this week... (type B&B rev $680K, Nu-Tek rev $1.8M, RPA $7200 to auto-track)" onchange="setNote(${cat.id},this.value)">${note}</textarea>
+      ${parsedHtml}
+    </div>`;
+  }).join('');
+}
+
+function setScore(catId,score,btn){
+  S.scores[catId]=score;save();
+  btn.closest('.score-row').querySelectorAll('.sbtn').forEach((b,i)=>b.classList.toggle('on',i+1===score));
+}
+function setNote(catId,note){
+  S.notes[catId]=note;
+  parseMetrics(note).forEach(p=>{S.metrics[p.id]=p.val;});
+  save();
+}
+
+function saveWeekly(){
+  const now = new Date();
+  const week={
+    date: now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
+    quarter: currentQuarterLabel(now),
+    month: currentMonthLabel(now),
+    scores:{...S.scores},
+    notes:{...S.notes}
+  };
+  S.savedWeeks.push(week);
+
+  // Auto-parse metrics from notes
+  const parsed=[];
+  CATS.forEach(cat=>{
+    const note=S.notes[cat.id]||'';
+    if(note)parseMetrics(note).forEach(p=>{S.metrics[p.id]=p.val;parsed.push(p);});
+  });
+
+  // Collect noteworthy items from this week to offer journal logging
+  const highlights = [];
+  CATS.forEach(cat=>{
+    const score = S.scores[cat.id]||0;
+    const note = S.notes[cat.id]||'';
+    if(score>=8 && note) highlights.push({cat:cat.name, score, note});
+    else if(note) highlights.push({cat:cat.name, score, note});
+  });
+
+  save();
+
+  // Show save confirmation
+  const el=document.getElementById('save-confirm');
+  el.style.display='block';
+  let msg = parsed.length ? `Saved. ${parsed.length} metric${parsed.length>1?'s':''} updated.` : 'Saved. Great week, Kamil.';
+  el.textContent = msg;
+  setTimeout(()=>el.style.display='none',2500);
+
+  // Offer journal logging for high-scoring or notable weeks
+  const highScores = CATS.filter(c=>(S.scores[c.id]||0)>=8 && (S.notes[c.id]||'').length>0);
+  if(highScores.length > 0){
+    const cat = highScores[0];
+    const noteSnippet = (S.notes[cat.id]||'').slice(0,80) + ((S.notes[cat.id]||'').length>80?'...':'');
+    pendingLog = {
+      label: `Week of ${week.date} · ${cat.name} (${S.scores[cat.id]}/10): ${noteSnippet}`,
+      horizon: 'cq'
+    };
+    pendingLogType = 'mov';
+    document.getElementById('modal-title').textContent = 'Log this week?';
+    document.getElementById('modal-yes-btn').textContent = 'Yes, add to Moves';
+    document.getElementById('modal-body').textContent = `You scored ${S.scores[cat.id]}/10 in ${cat.name} this week. Add a highlight to your 90-day journal?`;
+    setTimeout(()=>{document.getElementById('modal').classList.add('on');}, 800);
+  }
+}
+
+// ============================================================
+// JOURNAL
+// ============================================================
+const MMM_TYPES=[
+  {id:'mem',label:'Memories',color:'#534AB7'},
+  {id:'mov',label:'Moves',color:'#0F6E56'},
+  {id:'mag',label:'Magic',color:'#854F0B'}
+];
+
+function renderJournal(){
+  const horizons = getHorizons();
+  document.getElementById('journal-sub').textContent = 'Four time horizons · ' + currentQuarterLabel();
+  document.getElementById('journal-view').innerHTML=horizons.map(h=>{
+    const atype=S.activeMMMType[h.id]||'mem';
+    const tabs=MMM_TYPES.map(t=>`<button class="mct ${atype===t.id?'on':''}" style="${atype===t.id?'border-bottom-color:'+t.color+';color:'+t.color:''}" onclick="switchMMMType('${h.id}','${t.id}')">${t.label}</button>`).join('');
+    const entries=getJournal(h.id,atype);
+    const color=MMM_TYPES.find(t=>t.id===atype).color;
+    const entriesHtml=entries.length
+      ?entries.map((e,i)=>`<div class="entry-pill"><div class="entry-dot" style="background:${color}"></div><div class="entry-t">${e}</div><button class="entry-del" onclick="delJournal('${h.id}','${atype}',${i})">×</button></div>`).join('')
+      :`<div class="empty-hint">No entries yet.</div>`;
+    const typeLabel=atype==='mem'?'memory':atype==='mov'?'move':'magic moment';
+    return `<div class="mmm-horizon">
+      <div class="mmm-hhead"><div class="mmm-htitle">${h.label}</div><div class="mmm-hrange">${h.range}</div></div>
+      <div class="mmm-tabs">${tabs}</div>
+      <div class="mmm-entries">${entriesHtml}</div>
+      <div class="add-bar">
+        <input class="add-inp" id="jinp-${h.id}" placeholder="Add a ${typeLabel}..." onkeydown="if(event.key==='Enter')addJournal('${h.id}')">
+        <button class="add-btn-sm" onclick="addJournal('${h.id}')">+ Add</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function switchMMMType(hid,tid){S.activeMMMType[hid]=tid;save();renderJournal();}
+function addJournal(hid){
+  const inp=document.getElementById(`jinp-${hid}`);
+  const val=inp.value.trim();if(!val)return;
+  const tid=S.activeMMMType[hid]||'mem';
+  const k=hid+'_'+tid;
+  if(!S.journal[k])S.journal[k]=[...(SEEDS[hid]?.[tid]||[])];
+  S.journal[k].unshift(val);inp.value='';save();renderJournal();
+}
+function delJournal(hid,tid,idx){
+  const k=hid+'_'+tid;S.journal[k].splice(idx,1);save();renderJournal();
+}
+
+// ============================================================
+// REPORT
+// ============================================================
+function renderReport(){
+  const now = new Date();
+  document.getElementById('report-sub').textContent = 'Live snapshot · ' + currentQuarterLabel(now);
+
+  const scores=CATS.map(c=>S.scores[c.id]||0);
+  const filled=scores.filter(s=>s>0);
+  const avg=filled.length?(filled.reduce((a,b)=>a+b,0)/filled.length).toFixed(1):'—';
+  const totalGoals=CATS.reduce((a,cat)=>a+getUserGoals(cat.id,'quarterly').length,0);
+  const doneGoals=CATS.reduce((a,cat)=>a+getUserGoals(cat.id,'quarterly').filter(g=>g.done).length,0);
+  const pct=totalGoals?Math.round((doneGoals/totalGoals)*100):0;
+
+  const catRows=CATS.map(cat=>{
+    const s=S.scores[cat.id]||0;
+    return `<div class="bar-row">
+      <div class="bar-name"><div class="bar-dot-sm" style="background:${cat.color}"></div>${cat.name}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${s*10}%;background:${cat.color}"></div></div>
+      <div class="bar-score">${s>0?s+'/10':'—'}</div>
+    </div>`;
+  }).join('');
+
+  // Group saved weeks by quarter for history display
+  const byQuarter = {};
+  S.savedWeeks.forEach(w=>{
+    const qk = w.quarter || 'Unknown';
+    if(!byQuarter[qk]) byQuarter[qk] = [];
+    byQuarter[qk].push(w);
+  });
+  const histHtml = Object.keys(byQuarter).reverse().slice(0,4).map(qk=>{
+    const weeks = byQuarter[qk];
+    const allScores = weeks.flatMap(w=>Object.values(w.scores).filter(v=>v>0));
+    const qa = allScores.length?(allScores.reduce((a,b)=>a+b,0)/allScores.length).toFixed(1):'—';
+    return `<div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:500;color:var(--text)">${qk}</span>
+        <span style="font-size:14px;font-weight:500;color:var(--text)">${qa} avg</span>
+      </div>
+      <div style="font-size:11px;color:var(--text3)">${weeks.length} week${weeks.length!==1?'s':''} logged</div>
+    </div>`;
+  }).join('') || '<div style="font-size:13px;color:var(--text3);font-style:italic;padding:8px 0">No weeks saved yet.</div>';
+
+  const myself=[
+    {h:'Last 90 days', t:'You stayed on track. Executing the difficult changes, still living life to the fullest and creating unforgettable memories.'},
+    {h:'Last 12 months', t:'How proud he is about staying on track. Executing the difficult changes, still living life to the fullest and creating unforgettable memories.'},
+    {h:'Last 3 years', t:'The level of perseverance and courage was extraordinary. A discovery of a resilient self.'},
+    {h:'5-year vision', t:'You\'re putting in the work and making Big Happen. Stay obsessed with execution and keep creating magic along the way.'}
+  ];
+
+  document.getElementById('report-view').innerHTML=`
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">${avg}</div><div class="stat-label">Weekly avg</div></div>
+      <div class="stat-card"><div class="stat-num">${pct}%</div><div class="stat-label">Q goals done</div></div>
+      <div class="stat-card"><div class="stat-num">${S.savedWeeks.length}</div><div class="stat-label">Weeks logged</div></div>
+    </div>
+    <div class="sl">Category scores · ${currentQuarterLabel(now)}</div>
+    <div class="card"><div class="card-body">${catRows}</div></div>
+    <div class="sl" style="margin-top:16px">Check-in history by quarter</div>
+    <div class="card"><div class="card-body">${histHtml}</div></div>
+    <div class="sl" style="margin-top:16px">Future self says...</div>
+    ${myself.map(m=>`<div class="myself-card"><div class="myself-horizon">${m.h}</div><div class="myself-text">"${m.t}"</div></div>`).join('')}
+  `;
+}
+
+// ============================================================
+// MONTH-END REVIEW
+// ============================================================
+function checkMonthEndReview(){
+  const now = new Date();
+  const currentMK = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  const reviewKey = 'reviewed_month_'+currentMK;
+  if(S[reviewKey]) return; // already reviewed this month
+
+  // Find last month's incomplete goals across all cats
+  const prevMonth = new Date(now.getFullYear(), now.getMonth()-1, 1);
+  const prevMK = prevMonth.getFullYear()+'-'+String(prevMonth.getMonth()+1).padStart(2,'0');
+
+  const incompleteGoals = [];
+  CATS.forEach(cat=>{
+    const mk = 'goals_'+cat.id+'_monthly_'+prevMK;
+    if(S.userGoals && S.userGoals[mk]){
+      S.userGoals[mk].filter(g=>!g.done && g.type==='goal').forEach(g=>{
+        incompleteGoals.push({catId:cat.id, catName:cat.name, goal:g, prevMK});
+      });
+    }
+  });
+
+  // Mark as reviewed even if nothing to review
+  if(incompleteGoals.length===0){ S[reviewKey]=true; save(); return; }
+
+  // Delay slightly so app has finished rendering
+  setTimeout(()=>showReviewModal(incompleteGoals, currentMK, reviewKey), 800);
+}
+
+let reviewQueue = [];
+let reviewRKey = '';
+
+function showReviewModal(goals, currentMK, rKey){
+  reviewQueue = [...goals];
+  reviewRKey = rKey;
+  showNextReview();
+}
+
+function showNextReview(){
+  if(reviewQueue.length===0){
+    S[reviewRKey]=true; save();
+    document.getElementById('modal').classList.remove('on');
+    return;
+  }
+  const item = reviewQueue[0];
+  const remaining = reviewQueue.length;
+  // Hide the default modal buttons — we render our own inside modal-body
+  document.getElementById('modal-yes-btn').style.display='none';
+  document.getElementById('modal-skip').style.display='none';
+  document.getElementById('modal-title').textContent = 'Month-end review · '+remaining+' remaining';
+  document.getElementById('modal-body').innerHTML =
+    '<div style="font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:5px">'+item.catName+'</div>'+
+    '<div style="font-size:15px;color:var(--text);margin-bottom:8px;line-height:1.4">“'+item.goal.label+'”</div>'+
+    '<div style="font-size:13px;color:var(--text2);margin-bottom:16px">Not completed last month. What would you like to do?</div>'+
+    '<div style="display:flex;flex-direction:column;gap:8px">'+
+    '<button class="modal-yes" style="background:var(--mov)" onclick="reviewCarryForward()">Carry forward to this month</button>'+
+    '<button class="modal-skip" style="display:block" onclick="reviewDrop()">Drop it</button>'+
+    '</div>';
+  document.getElementById('modal').classList.add('on');
+}
+
+function reviewCarryForward(){
+  const item = reviewQueue.shift();
+  const key = userGoalKey(item.catId, 'monthly');
+  if(!S.userGoals) S.userGoals={};
+  if(!S.userGoals[key]) getUserGoals(item.catId, 'monthly');
+  if(!S.userGoals[key].find(g=>g.label===item.goal.label)){
+    S.userGoals[key].push({
+      id:'g_cf_'+item.catId+'_'+Date.now(),
+      label:item.goal.label,
+      type:'goal',
+      done:false,
+      addedAt:Date.now(),
+      carriedForward:true
+    });
+  }
+  save();
+  if(reviewQueue.length>0){ showNextReview(); }
+  else {
+    S[reviewRKey]=true; save();
+    // Reset modal button visibility and close
+    document.getElementById('modal-yes-btn').style.display='';
+    document.getElementById('modal-skip').style.display='';
+    document.getElementById('modal').classList.remove('on');
+    renderCatGrid();
+  }
+}
+
+function reviewDrop(){
+  reviewQueue.shift();
+  if(reviewQueue.length>0){ showNextReview(); }
+  else {
+    S[reviewRKey]=true; save();
+    document.getElementById('modal-yes-btn').style.display='';
+    document.getElementById('modal-skip').style.display='';
+    document.getElementById('modal').classList.remove('on');
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+const now = new Date();
+document.getElementById('topbar-date').textContent = now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+checkRollover();
+renderCatGrid();
+renderWeekly();
+
+</script>
+</body>
+</html>
