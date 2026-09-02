@@ -151,6 +151,60 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 .rollover-banner{background:var(--mov-bg);border:0.5px solid var(--mov);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--mov);line-height:1.6;display:none}
 .rollover-banner b{font-weight:500}
+
+/* ── MONTH REVIEW ─────────────────────────────────────────────────────── */
+.review-banner{background:var(--surface);border:0.5px solid var(--border-med);border-left:3px solid #BA7517;border-radius:var(--radius-sm);padding:13px 14px;margin-bottom:16px;display:none}
+.rvb-title{font-size:14px;font-weight:500;color:var(--text);line-height:1.4}
+.rvb-sub{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.5}
+.rvb-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.rvb-chip{font-size:12px;font-weight:500;padding:7px 12px;border-radius:999px;background:#FAEEDA;color:#8A560F;border:0.5px solid rgba(186,117,23,0.3);cursor:pointer;font-family:'DM Sans',sans-serif}
+.rvb-chip:active{transform:scale(0.97)}
+.pending-tag{display:inline-block;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#8A560F;background:#FAEEDA;border-radius:999px;padding:3px 8px}
+.rv-open-btn{width:100%;margin-top:10px;padding:11px;border-radius:var(--radius-sm);border:0.5px solid var(--border-med);background:transparent;color:var(--text);font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.rv-open-btn:active{background:var(--surface2)}
+
+.review-overlay{display:none;position:fixed;inset:0;z-index:150;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.review-overlay.on{display:block}
+.rv-head{position:sticky;top:0;z-index:2;background:rgba(247,245,240,0.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:16px 20px 13px;border-bottom:0.5px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.rv-eyebrow{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
+.rv-month{font-family:'DM Serif Display',serif;font-size:24px;color:var(--text);line-height:1.15;margin-top:3px}
+.rv-x{font-size:22px;line-height:1;color:var(--text3);background:none;border:none;cursor:pointer;padding:2px 4px;flex-shrink:0}
+.rv-body{padding:20px 20px 40px}
+.rv-headline{display:flex;align-items:baseline;gap:9px;margin-bottom:16px}
+.rv-headline-num{font-family:'DM Serif Display',serif;font-size:38px;color:var(--text);line-height:1}
+.rv-headline-txt{font-size:13px;color:var(--text2);line-height:1.5}
+.rv-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:6px}
+.rv-row{display:flex;align-items:center;gap:9px;padding:7px 0}
+.rv-row-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.rv-row-name{font-size:13px;color:var(--text);width:104px;flex-shrink:0}
+.rv-row-bar{flex:1;height:4px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.rv-row-frac{font-size:11px;color:var(--text3);width:32px;text-align:right;flex-shrink:0}
+.rv-met{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:7px 0}
+.rv-met-l{font-size:13px;color:var(--text2)}
+.rv-met-v{font-size:13px;font-weight:500;color:var(--text);text-align:right}
+.rv-met-p{font-size:11px;font-weight:400;color:var(--text3)}
+.rv-empty{font-size:13px;color:var(--text3);line-height:1.6;padding:4px 0}
+.rv-quick{display:flex;gap:7px;margin-bottom:10px}
+.rv-quick button{flex:1;padding:8px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.rv-open{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:13px 14px;margin-bottom:8px;transition:opacity .15s}
+.rv-open.decided{opacity:.55}
+.rv-open-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+.rv-open-cat{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+.rv-done-btn{font-size:11px;color:var(--mov);background:var(--mov-bg);border:none;border-radius:999px;padding:4px 9px;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.rv-open-label{font-size:14px;color:var(--text);line-height:1.45;margin-bottom:11px}
+.rv-open-acts{display:flex;gap:7px}
+.rv-act{flex:1;padding:9px;border-radius:var(--radius-sm);border:0.5px solid var(--border-med);background:transparent;color:var(--text2);font-size:12.5px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.rv-act.on{background:var(--mov);border-color:var(--mov);color:#fff;font-weight:500}
+.rv-act.on.drop{background:var(--text3);border-color:var(--text3)}
+.rv-note{width:100%;min-height:96px;padding:12px 13px;border-radius:var(--radius);border:0.5px solid var(--border-med);background:var(--surface);color:var(--text);font-size:14px;line-height:1.6;font-family:'DM Sans',sans-serif;resize:vertical}
+.rv-note:focus{outline:none;border-color:var(--text3)}
+.rv-types{display:flex;gap:7px;margin-top:9px}
+.rv-type{flex:1;padding:9px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface);color:var(--text2);font-size:12.5px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.rv-type.on{font-weight:500;color:#fff}
+.rv-warn{display:none;font-size:12.5px;color:#A8452B;background:#FBEAE5;border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px;line-height:1.5}
+.rv-close-btn{width:100%;padding:15px;border-radius:var(--radius-sm);background:var(--text);color:var(--surface);font-size:15px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:22px}
+.rv-close-btn:active{opacity:.85}
+.rv-foot{font-size:11px;color:var(--text3);text-align:center;margin-top:11px;line-height:1.6}
 .card-body{padding:14px 16px}
 
 .goal-edit-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);border:0.5px solid var(--border);background:var(--surface);margin-bottom:6px}
@@ -193,6 +247,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="page-title">Life Plan</div>
   <div class="page-sub" id="home-sub"></div>
   <div class="rollover-banner" id="rollover-banner"></div>
+  <div class="review-banner" id="review-banner"></div>
   <div class="sl">Your categories</div>
   <div class="cat-grid" id="cat-grid"></div>
   <div id="cat-detail"></div>
@@ -237,13 +292,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </button>
 </nav>
 
+<div class="review-overlay" id="review-overlay"></div>
+
 <div class="modal-overlay" id="modal" onclick="closeModal()">
   <div class="modal-sheet" onclick="event.stopPropagation()">
     <div class="modal-title" id="modal-title">Log to journal?</div>
     <div class="modal-body" id="modal-body"></div>
     <div class="modal-actions">
       <button class="modal-yes" id="modal-yes-btn" onclick="confirmLog()">Yes, add to Moves</button>
-      <button class="modal-skip" onclick="closeModal()">Skip</button>
+      <button class="modal-skip" id="modal-skip" onclick="closeModal()">Skip</button>
     </div>
   </div>
 </div>
@@ -730,6 +787,7 @@ let S = {
   activeCat:null, activePeriod:{}, activeMMMType:{},
   checked:{},metrics:{},scores:{},notes:{},
   savedWeeks:[],
+  monthReviews:{},
   journal: buildDefaultJournal(),
   lastRolloverQuarter:null, lastRolloverYear:null,
   _version: DATA_VERSION
@@ -828,15 +886,19 @@ function checkRollover(){
       S.journal['cq_'+t] = [];
     });
 
-    // Reset quarterly goals and metrics
+    // Snapshot the closing quarter's metric readings before they reset, so the
+    // numbers survive as history instead of being thrown away
+    if(!S.metricHistory) S.metricHistory = {};
+    const closingQ = getQuarterKey(passedQEnd);
+    const qSnap = {};
+    Object.keys(S.metrics).forEach(k=>{ if(!k.endsWith('_mo')) qSnap[k]=S.metrics[k]; });
+    if(Object.keys(qSnap).length) S.metricHistory[closingQ] = qSnap;
+
     Object.keys(S.checked).forEach(k=>{if(k.includes('_quarterly_'))delete S.checked[k];});
     Object.keys(S.metrics).forEach(k=>{ if(!k.endsWith('_mo')) delete S.metrics[k]; });
-    // Reset quarterly userGoals for new quarter
-    if(S.userGoals){
-      Object.keys(S.userGoals).forEach(k=>{
-        if(k.includes('_quarterly_')) delete S.userGoals[k];
-      });
-    }
+    // Past quarters' userGoals are deliberately KEPT. They are already scoped by
+    // period key (goals_<cat>_quarterly_<YYYY-QN>), so the new quarter gets a
+    // fresh key of its own — deleting the old ones only destroyed history.
 
     S.lastRolloverQuarter = newQKey;
     rolledQ = true;
@@ -860,13 +922,8 @@ function checkRollover(){
         }
         S.journal['ly_'+t]=[];
       });
-      // Reset yearly goals
+      // Reset yearly goals — again, past years' userGoals are kept on purpose
       Object.keys(S.checked).forEach(k=>{if(k.includes('_yearly_'))delete S.checked[k];});
-      if(S.userGoals){
-        Object.keys(S.userGoals).forEach(k=>{
-          if(k.includes('_yearly_')) delete S.userGoals[k];
-        });
-      }
       S.lastRolloverYear = yKey;
       rolledY = true;
       save();
@@ -879,8 +936,8 @@ function checkRollover(){
     b.innerHTML=`<b>New period, fresh start.</b> Your journal has been archived and ${currentQuarterLabel()} is ready. Completed goals were logged as Moves.`;
     setTimeout(()=>b.style.display='none',8000);
   }
-  // Check if we need to show month-end review
-  checkMonthEndReview();
+  // Fold any legacy review flags into the monthReviews record
+  migrateLegacyReviewFlags();
 }
 
 // ============================================================
@@ -1007,6 +1064,7 @@ function renderCatGrid(){
       <div class="cat-frac">${done}/${goals.length} goals</div>
     </div>`;
   }).join('');
+  renderReviewBanner();
 }
 
 function openCat(catId){
@@ -1094,10 +1152,29 @@ function renderCatDetail(){
       <button class="add-goal-btn" onclick="var el=document.getElementById('aginp${cat.id}${period}');addUserGoal(${cat.id},'${period}',el.value);el.value=''">+ Add</button>
     </div>`;
 
-    // ── PREVIOUS PERIOD GRACE WINDOW ─────────────────────────────────────
-    // Shows last period's goals below current, so you can still check them off
+    // ── UNREVIEWED PERIODS ───────────────────────────────────────────────
+    // For months: EVERY past month still awaiting review stays pinned here,
+    // not just last month, so a month you never got to can't slip out of reach.
     let graceHtml = '';
-    if(period !== 'fiveyear'){
+    if(period === 'monthly'){
+      graceHtml = getUnreviewedMonths().map(mk=>{
+        const mGoals = goalsForMonth(cat.id, mk);
+        if(!mGoals.length) return '';
+        const nm = mGoals.filter(g=>g.type!=='metric');
+        const dn = nm.filter(g=>g.done).length, tot = nm.length;
+        const allDone = tot>0 && dn===tot;
+        const rows = renderGoalRows(mGoals, cat.id, period, monthGoalsKey(cat.id,mk), cat.color, true);
+        return `<div style="margin:0 16px 16px;border-top:0.5px dashed var(--border);padding-top:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px">
+            <div style="font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)">${monthKeyLabel(mk)}</div>
+            <div style="font-size:11px;color:${allDone?'var(--mov)':'var(--text3)'}">${dn}/${tot} done${allDone?' ✓':''}</div>
+          </div>
+          <div class="pending-tag">Awaiting review</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">${rows}</div>
+          <button class="rv-open-btn" onclick="openMonthReview('${mk}')">Review ${monthKeyLabel(mk)}</button>
+        </div>`;
+      }).join('');
+    } else if(period !== 'fiveyear'){
       const {goals:prevGoals, storeKey:prevKey} = getPrevGoals(cat.id, period);
       const prevIncomplete = prevGoals.filter(g=>!g.done && g.type!=='metric');
       const prevDone = prevGoals.filter(g=>g.done && g.type!=='metric').length;
@@ -1223,7 +1300,7 @@ function prevPeriodLabel(period){
 
 function getPrevGoals(catId, period){
   const pk = prevPeriodKey(period);
-  if(!pk) return [];
+  if(!pk) return {goals:[], storeKey:null};
   const storeKey = 'goals_'+catId+'_'+period+'_'+pk;
   if(S.userGoals && S.userGoals[storeKey]) return {goals: S.userGoals[storeKey], storeKey};
   return {goals:[], storeKey};
@@ -1245,7 +1322,15 @@ function updateMetric(metricId,catId,period,idx,rawVal,label,unit,target){
   }
 }
 
-function closeModal(){document.getElementById('modal').classList.remove('on');pendingLog=null;}
+function closeModal(){
+  document.getElementById('modal').classList.remove('on');
+  // Restore the default buttons — dismissing a custom modal used to leave them
+  // hidden, which silently broke every modal after it
+  const y=document.getElementById('modal-yes-btn'), sk=document.getElementById('modal-skip');
+  if(y) y.style.display='';
+  if(sk) sk.style.display='';
+  pendingLog=null;
+}
 
 function confirmLog(){
   if(!pendingLog)return;
@@ -1454,103 +1539,271 @@ function renderReport(){
 }
 
 // ============================================================
-// MONTH-END REVIEW
+// MONTH REVIEW
+// A finished month never disappears on its own. Every past month that has
+// goals stays in the "awaiting review" queue until it is explicitly closed
+// out — however many months roll by in the meantime.
 // ============================================================
-function checkMonthEndReview(){
-  const now = new Date();
-  const currentMK = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
-  const reviewKey = 'reviewed_month_'+currentMK;
-  if(S[reviewKey]) return; // already reviewed this month
+function esc(x){return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function monthKeyOf(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+function currentMonthKey(){ return monthKeyOf(new Date()); }
+function monthKeyLabel(mk){
+  const [y,m]=mk.split('-').map(Number);
+  return new Date(y,m-1,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+}
+function monthKeyShort(mk){
+  const [y,m]=mk.split('-').map(Number);
+  return new Date(y,m-1,1).toLocaleDateString('en-US',{month:'short',year:'numeric'});
+}
+function monthGoalsKey(catId,mk){ return 'goals_'+catId+'_monthly_'+mk; }
+function goalsForMonth(catId,mk){ return (S.userGoals && S.userGoals[monthGoalsKey(catId,mk)]) || []; }
 
-  // Find last month's incomplete goals across all cats
-  const prevMonth = new Date(now.getFullYear(), now.getMonth()-1, 1);
-  const prevMK = prevMonth.getFullYear()+'-'+String(prevMonth.getMonth()+1).padStart(2,'0');
-
-  const incompleteGoals = [];
-  CATS.forEach(cat=>{
-    const mk = 'goals_'+cat.id+'_monthly_'+prevMK;
-    if(S.userGoals && S.userGoals[mk]){
-      S.userGoals[mk].filter(g=>!g.done && g.type==='goal').forEach(g=>{
-        incompleteGoals.push({catId:cat.id, catName:cat.name, goal:g, prevMK});
-      });
+// Legacy flags were named reviewed_month_<the month you were IN> and meant
+// "the month before this one was cleared". Fold them in once, then drop them.
+function migrateLegacyReviewFlags(){
+  if(!S.monthReviews) S.monthReviews={};
+  let touched=false;
+  Object.keys(S).forEach(k=>{
+    const m=k.match(/^reviewed_month_(\d{4})-(\d{2})$/);
+    if(!m) return;
+    if(S[k]===true){
+      const pk=monthKeyOf(new Date(Number(m[1]),Number(m[2])-2,1));
+      if(!S.monthReviews[pk]) S.monthReviews[pk]={closedAt:null,legacy:true,note:'',carried:[],dropped:[]};
     }
+    delete S[k]; touched=true;
   });
-
-  // Mark as reviewed even if nothing to review
-  if(incompleteGoals.length===0){ S[reviewKey]=true; save(); return; }
-
-  // Delay slightly so app has finished rendering
-  setTimeout(()=>showReviewModal(incompleteGoals, currentMK, reviewKey), 800);
+  if(touched) save();
 }
 
-let reviewQueue = [];
-let reviewRKey = '';
-
-function showReviewModal(goals, currentMK, rKey){
-  reviewQueue = [...goals];
-  reviewRKey = rKey;
-  showNextReview();
+// Every month with goals that is older than this one and not yet closed out.
+// Oldest first — the queue you work through.
+function getUnreviewedMonths(){
+  if(!S.monthReviews) S.monthReviews={};
+  if(!S.userGoals) return [];
+  const cur=currentMonthKey(), out=new Set();
+  Object.keys(S.userGoals).forEach(k=>{
+    const m=k.match(/^goals_\d+_monthly_(\d{4}-\d{2})$/);
+    if(m && m[1]<cur && !S.monthReviews[m[1]]) out.add(m[1]);
+  });
+  return [...out].sort();
 }
 
-function showNextReview(){
-  if(reviewQueue.length===0){
-    S[reviewRKey]=true; save();
-    document.getElementById('modal').classList.remove('on');
+function monthScorecard(mk){
+  return CATS.map(cat=>{
+    const g=goalsForMonth(cat.id,mk).filter(x=>x.type!=='metric');
+    return {cat, done:g.filter(x=>x.done).length, total:g.length};
+  }).filter(r=>r.total>0);
+}
+
+function monthOpenGoals(mk){
+  const out=[];
+  CATS.forEach(cat=>{
+    goalsForMonth(cat.id,mk).forEach((g,idx)=>{
+      if(g.type!=='metric' && !g.done) out.push({cat,goal:g,idx,mk});
+    });
+  });
+  return out;
+}
+
+function monthMetrics(mk){
+  const out=[];
+  CATS.forEach(cat=>{
+    goalsForMonth(cat.id,mk).forEach(g=>{
+      if(g.type==='metric'){
+        const mid=g.metricId||g.id, v=S.metrics[mid];
+        if(v!==undefined && v!==null && v!=='' && !isNaN(v)) out.push({cat,g,mid,val:v});
+      }
+    });
+  });
+  return out;
+}
+
+// ── BANNER ────────────────────────────────────────────────────────────────
+function renderReviewBanner(){
+  const el=document.getElementById('review-banner');
+  if(!el) return;
+  const pending=getUnreviewedMonths();
+  if(!pending.length){ el.style.display='none'; el.innerHTML=''; return; }
+  const openCount=pending.reduce((n,mk)=>n+monthOpenGoals(mk).length,0);
+  el.style.display='block';
+  el.innerHTML=
+    '<div class="rvb-title">'+(pending.length===1
+      ? monthKeyLabel(pending[0])+' is waiting on your review'
+      : pending.length+' months are waiting on your review')+'</div>'+
+    '<div class="rvb-sub">'+openCount+' goal'+(openCount===1?'':'s')+' still open. Nothing gets archived until you close it out.</div>'+
+    '<div class="rvb-chips">'+pending.map(mk=>
+      '<button class="rvb-chip" onclick="openMonthReview(\''+mk+'\')">'+monthKeyShort(mk)+' &rarr;</button>').join('')+'</div>';
+}
+
+// ── CLOSE-OUT ─────────────────────────────────────────────────────────────
+let rvMonth=null, rvDecisions={}, rvNote='', rvNoteType='mov';
+
+function openMonthReview(mk){
+  rvMonth=mk; rvDecisions={}; rvNote=''; rvNoteType='mov';
+  renderMonthReview();
+  document.getElementById('review-overlay').classList.add('on');
+  document.body.style.overflow='hidden';
+  window.scrollTo(0,0);
+}
+
+function closeMonthReview(){
+  document.getElementById('review-overlay').classList.remove('on');
+  document.body.style.overflow='';
+  rvMonth=null; rvDecisions={}; rvNote='';
+  renderCatGrid(); renderCatDetail();
+}
+
+function rvToggleDone(catId,mk,idx){
+  const g=(S.userGoals[monthGoalsKey(catId,mk)]||[])[idx];
+  if(!g) return;
+  g.done=!g.done;
+  if(g.done) delete rvDecisions[g.id];
+  save(); renderMonthReview();
+}
+
+function rvDecide(goalId,choice){
+  if(rvDecisions[goalId]===choice) delete rvDecisions[goalId];
+  else rvDecisions[goalId]=choice;
+  renderMonthReview();
+}
+
+function rvDecideAll(choice){
+  monthOpenGoals(rvMonth).forEach(o=>{ rvDecisions[o.goal.id]=choice; });
+  renderMonthReview();
+}
+
+function rvSetNoteType(t){ rvNoteType=t; renderMonthReview(); }
+
+function renderMonthReview(){
+  const mk=rvMonth;
+  if(!mk) return;
+  const ta=document.getElementById('rv-note'); if(ta) rvNote=ta.value;
+
+  const card=monthScorecard(mk);
+  const open=monthOpenGoals(mk);
+  const mets=monthMetrics(mk);
+  const totDone=card.reduce((n,r)=>n+r.done,0);
+  const totAll=card.reduce((n,r)=>n+r.total,0);
+  const pct=totAll?Math.round(totDone/totAll*100):0;
+
+  const rows=card.length ? card.map(r=>{
+    const p=r.total?Math.round(r.done/r.total*100):0;
+    return '<div class="rv-row"><div class="rv-row-dot" style="background:'+r.cat.color+'"></div>'+
+      '<div class="rv-row-name">'+r.cat.name+'</div>'+
+      '<div class="rv-row-bar"><div style="height:100%;width:'+p+'%;background:'+r.cat.color+';border-radius:2px"></div></div>'+
+      '<div class="rv-row-frac">'+r.done+'/'+r.total+'</div></div>';
+  }).join('') : '<div class="rv-empty">No monthly goals were set for this month.</div>';
+
+  const metHtml = mets.length
+    ? '<div class="sl" style="margin-top:24px">Numbers on record</div><div class="rv-card">'+
+      mets.map(m=>{
+        const p=m.g.target?Math.min(100,Math.round(m.val/m.g.target*100)):0;
+        return '<div class="rv-met"><div class="rv-met-l">'+esc(m.g.label)+'</div>'+
+          '<div class="rv-met-v">'+fmtVal(m.val,m.g.unit)+
+          (m.g.target?'<span class="rv-met-p"> &middot; '+p+'% of target</span>':'')+'</div></div>';
+      }).join('')+'</div>'
+    : '';
+
+  const quick = open.length>1
+    ? '<div class="rv-quick"><button onclick="rvDecideAll(\'carry\')">Carry all forward</button>'+
+      '<button onclick="rvDecideAll(\'drop\')">Drop all</button></div>'
+    : '';
+
+  const openHtml = open.length ? open.map(o=>{
+    const d=rvDecisions[o.goal.id];
+    return '<div class="rv-open'+(d?' decided':'')+'">'+
+      '<div class="rv-open-head"><div class="rv-open-cat" style="color:'+o.cat.color+'">'+o.cat.name+'</div>'+
+      '<button class="rv-done-btn" onclick="rvToggleDone('+o.cat.id+',\''+mk+'\','+o.idx+')">Actually done &#10003;</button></div>'+
+      '<div class="rv-open-label">'+esc(o.goal.label)+'</div>'+
+      '<div class="rv-open-acts">'+
+        '<button class="rv-act'+(d==='carry'?' on':'')+'" onclick="rvDecide(\''+o.goal.id+'\',\'carry\')">Carry forward</button>'+
+        '<button class="rv-act'+(d==='drop'?' on drop':'')+'" onclick="rvDecide(\''+o.goal.id+'\',\'drop\')">Drop it</button>'+
+      '</div></div>';
+  }).join('') : '<div class="rv-empty">Nothing left open &mdash; every goal this month is accounted for.</div>';
+
+  const undecided=open.filter(o=>!rvDecisions[o.goal.id]).length;
+  const TYPES=[{id:'mem',l:'Memory',c:'#534AB7'},{id:'mov',l:'Move',c:'#0F6E56'},{id:'mag',l:'Magic',c:'#854F0B'}];
+  const typeBtns=TYPES.map(t=>'<button class="rv-type'+(rvNoteType===t.id?' on':'')+'"'+
+    (rvNoteType===t.id?' style="background:'+t.c+';border-color:'+t.c+'"':'')+
+    ' onclick="rvSetNoteType(\''+t.id+'\')">'+t.l+'</button>').join('');
+
+  document.getElementById('review-overlay').innerHTML=
+    '<div class="rv-head"><div><div class="rv-eyebrow">Month in review</div>'+
+      '<div class="rv-month">'+monthKeyLabel(mk)+'</div></div>'+
+      '<button class="rv-x" onclick="closeMonthReview()">&#215;</button></div>'+
+    '<div class="rv-body">'+
+      '<div class="rv-headline"><div class="rv-headline-num">'+pct+'%</div>'+
+        '<div class="rv-headline-txt">'+totDone+' of '+totAll+' goals closed<br>across '+card.length+' area'+(card.length===1?'':'s')+'</div></div>'+
+      '<div class="sl">Where the month landed</div><div class="rv-card">'+rows+'</div>'+
+      metHtml+
+      '<div class="sl" style="margin-top:24px">Still open &mdash; decide on each</div>'+
+      quick+openHtml+
+      '<div class="sl" style="margin-top:24px">What this month taught you</div>'+
+      '<textarea class="rv-note" id="rv-note" placeholder="What worked, what didn\'t, what you\'re carrying into next month...">'+esc(rvNote)+'</textarea>'+
+      '<div class="rv-types">'+typeBtns+'</div>'+
+      '<div class="rv-foot" style="text-align:left;margin-top:7px">Saved with the month. If you write something, it also lands in your journal for the current quarter.</div>'+
+      '<div class="rv-warn" id="rv-warn"></div>'+
+      '<button class="rv-close-btn" onclick="closeOutMonth()">Close out '+monthKeyLabel(mk)+'</button>'+
+      '<div class="rv-foot">'+(undecided
+        ? undecided+' goal'+(undecided===1?'':'s')+' still needs a decision'
+        : 'Everything is accounted for')+'</div>'+
+    '</div>';
+}
+
+function closeOutMonth(){
+  const mk=rvMonth;
+  if(!mk) return;
+  const open=monthOpenGoals(mk);
+  const undecided=open.filter(o=>!rvDecisions[o.goal.id]);
+  if(undecided.length){
+    const w=document.getElementById('rv-warn');
+    if(w){
+      w.textContent=undecided.length+' goal'+(undecided.length===1?'':'s')+
+        ' still need'+(undecided.length===1?'s':'')+' a decision — carry forward, drop, or mark done.';
+      w.style.display='block';
+      w.scrollIntoView({behavior:'smooth',block:'center'});
+    }
     return;
   }
-  const item = reviewQueue[0];
-  const remaining = reviewQueue.length;
-  // Hide the default modal buttons — we render our own inside modal-body
-  document.getElementById('modal-yes-btn').style.display='none';
-  document.getElementById('modal-skip').style.display='none';
-  document.getElementById('modal-title').textContent = 'Month-end review · '+remaining+' remaining';
-  document.getElementById('modal-body').innerHTML =
-    '<div style="font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:5px">'+item.catName+'</div>'+
-    '<div style="font-size:15px;color:var(--text);margin-bottom:8px;line-height:1.4">“'+item.goal.label+'”</div>'+
-    '<div style="font-size:13px;color:var(--text2);margin-bottom:16px">Not completed last month. What would you like to do?</div>'+
-    '<div style="display:flex;flex-direction:column;gap:8px">'+
-    '<button class="modal-yes" style="background:var(--mov)" onclick="reviewCarryForward()">Carry forward to this month</button>'+
-    '<button class="modal-skip" style="display:block" onclick="reviewDrop()">Drop it</button>'+
-    '</div>';
-  document.getElementById('modal').classList.add('on');
-}
+  const ta=document.getElementById('rv-note'); if(ta) rvNote=ta.value;
 
-function reviewCarryForward(){
-  const item = reviewQueue.shift();
-  const key = userGoalKey(item.catId, 'monthly');
-  if(!S.userGoals) S.userGoals={};
-  if(!S.userGoals[key]) getUserGoals(item.catId, 'monthly');
-  if(!S.userGoals[key].find(g=>g.label===item.goal.label)){
-    S.userGoals[key].push({
-      id:'g_cf_'+item.catId+'_'+Date.now(),
-      label:item.goal.label,
-      type:'goal',
-      done:false,
-      addedAt:Date.now(),
-      carriedForward:true
-    });
+  const carried=[], dropped=[];
+  const curKey=cid=>userGoalKey(cid,'monthly');
+  open.forEach(o=>{
+    if(rvDecisions[o.goal.id]==='carry'){
+      carried.push(o.goal.label);
+      const k=curKey(o.cat.id);
+      if(!S.userGoals[k]) getUserGoals(o.cat.id,'monthly');
+      if(!S.userGoals[k].find(g=>g.label===o.goal.label)){
+        S.userGoals[k].push({
+          id:'g_cf_'+o.cat.id+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+          label:o.goal.label, type:'goal', done:false,
+          addedAt:Date.now(), carriedForward:true, carriedFrom:mk
+        });
+      }
+    } else dropped.push(o.goal.label);
+  });
+
+  // Freeze the month's numbers and scores into the record
+  const metricSnap={};
+  monthMetrics(mk).forEach(m=>{ metricSnap[m.mid]={val:m.val,label:m.g.label,unit:m.g.unit,target:m.g.target}; });
+  const cardSnap={};
+  monthScorecard(mk).forEach(r=>{ cardSnap[r.cat.id]={done:r.done,total:r.total}; });
+
+  if(!S.monthReviews) S.monthReviews={};
+  S.monthReviews[mk]={
+    closedAt:Date.now(), note:rvNote.trim(), noteType:rvNoteType,
+    scorecard:cardSnap, metrics:metricSnap, carried, dropped
+  };
+
+  if(rvNote.trim()){
+    const jk='cq_'+rvNoteType;
+    if(!S.journal[jk]) S.journal[jk]=[...(SEEDS.cq?.[rvNoteType]||[])];
+    S.journal[jk].unshift(monthKeyShort(mk)+' review — '+rvNote.trim());
   }
+
   save();
-  if(reviewQueue.length>0){ showNextReview(); }
-  else {
-    S[reviewRKey]=true; save();
-    // Reset modal button visibility and close
-    document.getElementById('modal-yes-btn').style.display='';
-    document.getElementById('modal-skip').style.display='';
-    document.getElementById('modal').classList.remove('on');
-    renderCatGrid();
-  }
-}
-
-function reviewDrop(){
-  reviewQueue.shift();
-  if(reviewQueue.length>0){ showNextReview(); }
-  else {
-    S[reviewRKey]=true; save();
-    document.getElementById('modal-yes-btn').style.display='';
-    document.getElementById('modal-skip').style.display='';
-    document.getElementById('modal').classList.remove('on');
-  }
+  closeMonthReview();
 }
 
 // ============================================================
