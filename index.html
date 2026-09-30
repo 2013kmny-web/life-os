@@ -848,14 +848,16 @@ function checkRollover(){
   // so it works correctly every quarter forever into the future
   const QUARTER_ENDS = getQuarterEnds();
   const passedQEnd = QUARTER_ENDS.find(qe => {
-    const nextDay = new Date(qe.getTime() + 86400000);
+    const nextDay = new Date(qe.getFullYear(), qe.getMonth(), qe.getDate()+1);
     const nextQKey = getQuarterKey(nextDay);
-    return now > qe && S.lastRolloverQuarter !== nextQKey;
+    // qe is the quarter's LAST DAY at 00:00, so `now > qe` was true all through
+    // that day — the rollover fired a day early, cascading the journal while
+    // periodKey() still reported the old quarter. Wait until the day is over.
+    return now >= nextDay && S.lastRolloverQuarter !== nextQKey;
   });
 
   if(passedQEnd){
-    const nextDay = new Date(passedQEnd.getTime() + 86400000);
-    const newQKey = getQuarterKey(nextDay);
+    const newQKey = getQuarterKey(new Date(passedQEnd.getFullYear(), passedQEnd.getMonth(), passedQEnd.getDate()+1));
 
     ['mem','mov','mag'].forEach(t => {
       // Step 1: tq -> ly (two quarters ago cascades into last year)
@@ -1538,6 +1540,16 @@ function renderReport(){
   `;
 }
 
+// Give every category a record for the CURRENT month on load, whether or not
+// its month tab is ever opened. Monthly records used to be created lazily —
+// only when you tapped into "month" for that category — so a month you never
+// tapped into left no trace at all, and there was nothing to review once it
+// ended. Quarterly records were always created eagerly by renderCatGrid();
+// monthly ones now match.
+function ensureCurrentMonthRecords(){
+  CATS.forEach(cat=>getUserGoals(cat.id,'monthly'));
+}
+
 // ============================================================
 // MONTH REVIEW
 // A finished month never disappears on its own. Every past month that has
@@ -1558,19 +1570,17 @@ function monthKeyShort(mk){
 function monthGoalsKey(catId,mk){ return 'goals_'+catId+'_monthly_'+mk; }
 function goalsForMonth(catId,mk){ return (S.userGoals && S.userGoals[monthGoalsKey(catId,mk)]) || []; }
 
-// Legacy flags were named reviewed_month_<the month you were IN> and meant
-// "the month before this one was cleared". Fold them in once, then drop them.
+// Clear the legacy reviewed_month_* flags WITHOUT treating them as reviews.
+// The old review flow crashed before it ever ran, and the only path that set a
+// flag was its "found nothing to review" branch — which fired both when a month
+// was genuinely complete AND when the month had left no record at all. Honouring
+// them would silently bury months that do hold data. Let getUnreviewedMonths()
+// decide from the records themselves.
 function migrateLegacyReviewFlags(){
   if(!S.monthReviews) S.monthReviews={};
   let touched=false;
   Object.keys(S).forEach(k=>{
-    const m=k.match(/^reviewed_month_(\d{4})-(\d{2})$/);
-    if(!m) return;
-    if(S[k]===true){
-      const pk=monthKeyOf(new Date(Number(m[1]),Number(m[2])-2,1));
-      if(!S.monthReviews[pk]) S.monthReviews[pk]={closedAt:null,legacy:true,note:'',carried:[],dropped:[]};
-    }
-    delete S[k]; touched=true;
+    if(/^reviewed_month_\d{4}-\d{2}$/.test(k)){ delete S[k]; touched=true; }
   });
   if(touched) save();
 }
@@ -1812,6 +1822,7 @@ function closeOutMonth(){
 const now = new Date();
 document.getElementById('topbar-date').textContent = now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 checkRollover();
+ensureCurrentMonthRecords();
 renderCatGrid();
 renderWeekly();
 
